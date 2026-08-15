@@ -1,12 +1,13 @@
+mod asset_bootstrap;
+
 use std::{
     collections::VecDeque,
     mem::MaybeUninit,
     path::{Path, PathBuf},
-    process::{Command, Stdio},
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
-use anyhow::{Context, Result};
+use anyhow::Result;
 use heroquest::audio::{GameAudio, SoundEffect};
 use heroquest::campaign::Campaign;
 use heroquest::cards::{Artifact, ChaosSpell, HeroSpell};
@@ -24,10 +25,6 @@ use heroquest::renderer::{GameOverlay, OverlayDialog, Renderer, TabletopSurface,
 use heroquest::startup::{StartupFlow, StartupStage};
 use sdl3::event::{Event, WindowEvent};
 use sdl3::keyboard::{Keycode, Mod};
-use sdl3::messagebox::{
-    ButtonData, ClickedButton, MessageBoxButtonFlag, MessageBoxFlag, show_message_box,
-    show_simple_message_box,
-};
 use sdl3::mouse::{Cursor, MouseButton, SystemCursor};
 
 enum DicePurpose {
@@ -460,108 +457,6 @@ fn commit_character_sheet_name(
     Ok(name)
 }
 
-fn original_us_art_root() -> PathBuf {
-    std::env::var_os("HEROQUEST_ART_DIR").map_or_else(
-        || PathBuf::from("assets/local/editions/original-us"),
-        PathBuf::from,
-    )
-}
-
-fn asset_installer_path() -> Option<PathBuf> {
-    if let Some(path) = std::env::var_os("HEROQUEST_ASSET_INSTALLER").map(PathBuf::from) {
-        return path.is_file().then_some(path);
-    }
-    let source_tree = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tools/install-all-assets.sh");
-    if source_tree.is_file() {
-        return Some(source_tree);
-    }
-    std::env::current_exe()
-        .ok()
-        .and_then(|executable| executable.parent().map(Path::to_path_buf))
-        .map(|directory| directory.join("tools/install-all-assets.sh"))
-        .filter(|path| path.is_file())
-}
-
-fn complete_runtime_assets_are_installed() -> bool {
-    let Some(installer) = asset_installer_path() else {
-        return false;
-    };
-    Command::new("bash")
-        .arg(installer)
-        .arg("--check")
-        .env("HEROQUEST_ART_DIR", original_us_art_root())
-        .stdout(Stdio::null())
-        .stderr(Stdio::null())
-        .status()
-        .is_ok_and(|status| status.success())
-}
-
-fn confirm_and_install_complete_runtime_assets() -> Result<bool> {
-    if complete_runtime_assets_are_installed() {
-        return Ok(true);
-    }
-
-    let buttons = [
-        ButtonData {
-            flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
-            button_id: 1,
-            text: "I Accept - Download",
-        },
-        ButtonData {
-            flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
-            button_id: 0,
-            text: "Quit",
-        },
-    ];
-    let warning = "The complete HeroQuest runtime asset set is not installed.\n\n\
-        If you continue, HeroQuest 3D will request HQ Game System US.rar directly from \
-        heroquestadventure.com and the classic STL collection directly from its public Google \
-        Drive folder. The project does not host or relay either collection. Bundled \
-        project-authored and AI-generated castle assets are already included in this checkout. \
-        External downloads total about 2.45 GiB and preparation needs roughly 7 GiB of free disk \
-        space.\n\n\
-        HeroQuest artwork, names, and trademarks belong to their respective owners. You are \
-        responsible for determining whether downloading and using these files is permitted where \
-        you live and under the source sites' terms. This fan project is not affiliated with or \
-        endorsed by Hasbro or Avalon Hill.\n\n\
-        Select I Accept - Download to assume responsibility and continue, or Quit to leave the \
-        files untouched.";
-    let accepted = matches!(
-        show_message_box(
-            MessageBoxFlag::WARNING,
-            &buttons,
-            "Complete HeroQuest asset installation",
-            warning,
-            None,
-            None,
-        )
-        .map_err(|error| anyhow::anyhow!(error.to_string()))?,
-        ClickedButton::CustomButton(button) if button.button_id == 1
-    );
-    if !accepted {
-        return Ok(false);
-    }
-
-    let installer = asset_installer_path().context(
-        "the complete asset installer is not available beside this build; set \
-         HEROQUEST_ASSET_INSTALLER to its path",
-    )?;
-    let status = Command::new("bash")
-        .arg(&installer)
-        .arg("--accept-liability")
-        .env("HEROQUEST_ART_DIR", original_us_art_root())
-        .status()
-        .with_context(|| format!("failed to launch asset installer {}", installer.display()))?;
-    if !status.success() {
-        anyhow::bail!("complete asset installer exited with {status}");
-    }
-    anyhow::ensure!(
-        complete_runtime_assets_are_installed(),
-        "asset installer finished without producing the complete runtime asset set"
-    );
-    Ok(true)
-}
-
 fn main() -> Result<()> {
     env_logger::init();
     let quest_path = quest_path_from_args()?;
@@ -614,21 +509,11 @@ fn main() -> Result<()> {
 
     let sdl = sdl3::init()?;
     let video = sdl.video()?;
-    match confirm_and_install_complete_runtime_assets() {
-        Ok(true) => {}
-        Ok(false) => return Ok(()),
-        Err(error) => {
-            let _ = show_simple_message_box(
-                MessageBoxFlag::ERROR,
-                "HeroQuest asset installation failed",
-                &format!(
-                    "HeroQuest 3D could not prepare every required runtime asset:\n\n{error:#}\n\n\
-                     Partial downloads are retained so the next attempt can resume."
-                ),
-                None,
-            );
-            return Err(error);
-        }
+    if matches!(
+        asset_bootstrap::ensure_complete_assets(&sdl, &video)?,
+        asset_bootstrap::AssetBootstrapOutcome::Quit
+    ) {
+        return Ok(());
     }
     let game_audio = match GameAudio::new(&sdl) {
         Ok(audio) => Some(audio),

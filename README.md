@@ -137,7 +137,10 @@ limited to the game and quest name.
 ## Complete first-run assets
 
 On a clean first run, the game requires the complete audited asset set rather
-than stopping after the board artwork. After the warning is accepted it:
+than stopping after the board artwork. Consent, live progress, cancellation,
+and retryable errors stay inside a compact HeroQuest setup window; no operating
+system message boxes or terminal-only progress meters are used. After the
+warning is accepted it:
 
 1. downloads `HQ Game System US.rar` directly from
    `heroquestadventure.com`, verifies its SHA-256, and creates every

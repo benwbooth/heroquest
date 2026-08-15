@@ -8,6 +8,12 @@ expected_sha256='a7d3ae6c71c8de3c517dd6667d7ab4a8cce3046e80e96ad2ef470f5ef8ec74d
 archive="$edition_root/source/HQ Game System US.rar"
 partial_archive="$archive.part"
 
+emit_progress() {
+    if [[ -n ${HEROQUEST_PROGRESS_FILE:-} ]]; then
+        printf '%s\t%s\n' "$1" "$2" >>"$HEROQUEST_PROGRESS_FILE"
+    fi
+}
+
 sha256_file() {
     if command -v sha256sum >/dev/null 2>&1; then
         sha256sum "$1" | awk '{print $1}'
@@ -44,6 +50,7 @@ EOF
 fi
 
 if is_installed; then
+    emit_progress 0.72 'Original-US scan assets already installed'
     printf 'Original-US scan-backed runtime art is already installed under %s\n' "$edition_root"
     exit 0
 fi
@@ -65,13 +72,19 @@ fi
 
 mkdir -p "$edition_root/source"
 if [[ -f "$archive" ]]; then
+    emit_progress 0.57 'Verifying original-US scan archive'
     actual_sha256=$(sha256_file "$archive")
     if [[ $actual_sha256 != "$expected_sha256" ]]; then
         printf 'Existing archive failed SHA-256 verification.\nExpected: %s\nActual:   %s\nFile: %s\n' \
             "$expected_sha256" "$actual_sha256" "$archive" >&2
         exit 4
     fi
+elif [[ -f "$partial_archive" ]] \
+    && [[ $(sha256_file "$partial_archive") == "$expected_sha256" ]]; then
+    emit_progress 0.57 'Verified retained original-US download'
+    mv -- "$partial_archive" "$archive"
 else
+    emit_progress 0.02 'Downloading original-US scan archive'
     printf 'Downloading HQ Game System US directly from heroquestadventure.com...\n'
     curl --fail --location --continue-at - --progress-bar \
         --output "$partial_archive" "$source_url"
@@ -84,6 +97,7 @@ else
     mv -- "$partial_archive" "$archive"
 fi
 
+emit_progress 0.60 'Extracting verified original-US source documents'
 printf 'Extracting the verified archive...\n'
 mkdir -p "$edition_root/scans"
 if [[ $rar_tool == unrar ]]; then
@@ -105,6 +119,7 @@ mkdir -p \
     "$edition_root/poster-pages" \
     "$edition_root/extras-pages"
 
+emit_progress 0.64 'Rendering board, cards, manuals, and quest pages'
 printf 'Rendering runtime pages from the source PDFs...\n'
 pdftoppm -jpeg -jpegopt quality=95 -r 300 -singlefile \
     "$edition_root/scans/Gameboard.pdf" "$edition_root/board-scan"
@@ -154,6 +169,7 @@ cat >"$edition_root/board-runtime-calibration.json" <<'EOF'
 }
 EOF
 
+emit_progress 0.69 'Extracting optimized tabletop textures'
 printf 'Extracting optimized board-game textures...\n'
 HEROQUEST_ART_ROOT="$edition_root" "$repo_root/tools/extract-original-us-tabletop-art.sh"
 HEROQUEST_ART_DIR="$edition_root" "$repo_root/tools/extract-original-us-screen.sh"
@@ -166,4 +182,5 @@ if ! is_installed; then
     exit 6
 fi
 
+emit_progress 0.72 'Original-US scan art ready'
 printf 'Original-US scan-backed runtime art is ready under %s\n' "$edition_root"
