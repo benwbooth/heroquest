@@ -20,12 +20,8 @@ sha256_file() {
 }
 
 is_installed() {
-    [[ -f "$edition_root/board-runtime.jpg" ]] \
-        && [[ -f "$edition_root/startup/box/top.jpg" ]] \
-        && [[ -f "$edition_root/screen/information-screen-front.png" ]] \
-        && [[ -f "$edition_root/tabletop/player/character-sheet.png" ]] \
-        && [[ -f "$edition_root/components/doors/open.png" ]] \
-        && [[ -f "$edition_root/dice/skull.png" ]]
+    HEROQUEST_ART_DIR="$edition_root" \
+        "$repo_root/tools/audit-original-us-scan-art.sh" >/dev/null 2>&1
 }
 
 if [[ ${1:-} == --check ]]; then

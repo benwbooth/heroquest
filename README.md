@@ -134,22 +134,46 @@ The ornamented in-world OSD reports the active Hero, movement, Body points,
 rules events, and context-sensitive clickable actions. The window title stays
 limited to the game and quest name.
 
-## Local scans
+## Complete first-run assets
 
-The default art root is `assets/local/editions/original-us/`. On a clean first
-run, the game displays a warning and offers to download `HQ Game System US.rar`
-directly from `heroquestadventure.com`. The repository and release packages do
-not host or relay the archive. The installer resumes partial transfers, checks
-the known SHA-256 before extraction, and generates all scan-backed runtime
-textures locally. It can also be run explicitly:
+On a clean first run, the game requires the complete audited asset set rather
+than stopping after the board artwork. After the warning is accepted it:
+
+1. downloads `HQ Game System US.rar` directly from
+   `heroquestadventure.com`, verifies its SHA-256, and creates every
+   scan-backed texture;
+2. downloads the classic STL collection directly from its public Google Drive
+   folder, converts the figures, furniture, traps, and optional walls to GLB;
+3. builds the project-authored dice, door stands, markers, fittings, weapon
+   rack, and quest-specific Orc variants; and
+4. audits every required and optional runtime slot before launching.
+
+The Gothic room panorama and foreground GLB are bundled under
+`assets/environment/`, so a clean installation does not depend on an AI service
+or generated-image cache. The external collections are never hosted or relayed
+by this repository. Run the complete installer explicitly with:
 
 ```sh
-tools/install-original-us-scan-pack.sh --accept-liability
+tools/install-all-assets.sh --accept-liability
 ```
 
-The download is about 1.77 GiB and the prepared private pack needs roughly 5
-GiB. `curl`, `unrar`, Poppler's `pdftoppm`, and ImageMagick's `magick` must be
-available while the current source-tree installer runs.
+External downloads total about 2.45 GiB and the prepared private pack needs
+roughly 7 GiB. The Nix development shell supplies `curl`, `unrar-free`,
+Poppler, ImageMagick, `uv`, `gdown`, Blender, and `jq` for the source-tree
+installer. Transfers resume after interruption.
+
+The scan-only lower-level command remains available as
+`tools/install-original-us-scan-pack.sh`.
+
+The complete source map is machine-readable at `assets/asset-sources.json`.
+It accounts separately for the original-US printed art, external STL geometry,
+project-authored 3D complements, castle environment, UI font, synthesized
+audio, and executable rules/quest data. `tools/audit-original-us-scan-art.sh`
+checks every source document and derived scan asset rather than sampling a few
+files, while `tools/audit-all-assets.sh` verifies the complete cross-family
+set and the stable bundled-asset hashes.
+
+The default private art root is `assets/local/editions/original-us/`.
 
 To use your own files instead, run
 `tools/import-local-assets.sh` with a legally obtained quest-book PDF and,
@@ -159,7 +183,7 @@ optionally, a scan/photo of your physical board and a rulebook PDF:
 tools/import-local-assets.sh /path/to/quest-book.pdf /path/to/board.png /path/to/rulebook.pdf
 ```
 
-The manual importer never downloads anything, and neither installer stages its
+The manual importer never downloads anything, and no installer stages its
 result for Git. A copied `board-scan.png`, `board-scan.jpg`, or
 `board-scan.jpeg` in the selected edition directory is detected automatically
 on the next run. You can instead point at any image without copying it:
@@ -249,14 +273,15 @@ modeling script:
 blender --background --python tools/build-castle-room.py
 ```
 
-The generated files live under `assets/local/environment/` and are intentionally
-gitignored. The game combines `castle-great-hall-matte-v1.png` with
-`castle-great-hall.glb` automatically. To try another licensed or locally
-generated foreground model or another room plate without replacing them, set:
+The generated working files live under `assets/local/environment/` and are
+gitignored. The stable runtime panorama, GLB, Blender source, preview, and
+textures are also checked in under `assets/environment/`. The game prefers a
+local working copy and otherwise uses the bundled set. To try another licensed
+or locally generated foreground model or room panorama, set:
 
 ```sh
 HEROQUEST_ROOM_MODEL=/path/to/castle-room.glb cargo run
-HEROQUEST_ROOM_MATTE=/path/to/table-free-room.png cargo run
+HEROQUEST_ROOM_PANORAMA=/path/to/equirectangular-room.png cargo run
 ```
 
 ## License

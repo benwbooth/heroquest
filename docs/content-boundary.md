@@ -13,9 +13,20 @@ they own without accidentally publishing those files.
 The first-run installer distributes only source metadata and retrieval code.
 After explicit consent it requests the original-US archive directly from
 `heroquestadventure.com`, verifies the known digest, and creates local runtime
-derivatives. Neither GitHub nor the project serves the archive or the extracted
-files. The user-facing warning identifies the source and leaves the decision to
-download with the user.
+derivatives. It also requests the classic STL pack directly from its public
+Google Drive folder and converts those sources locally. Neither GitHub nor the
+project serves either external collection or their extracted files. The
+user-facing warning identifies both sources and leaves the decision to download
+with the user.
+
+Project-authored and project-generated environment assets may be checked in
+under `assets/environment/`; they contain no HeroQuest scans or third-party
+meshes and keep first run independent of an AI-generation service.
+
+`assets/asset-sources.json` is the complete asset-family ledger. It records
+delivery, source, checksum/provenance, local destination, and redistribution
+boundary for print art, STL geometry, generated models, the room, font, audio,
+and rules/quest data.
 
 Quest JSON checked into the repository should use original names and prose
 unless there is explicit permission to redistribute the official content.

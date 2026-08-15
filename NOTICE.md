@@ -18,6 +18,10 @@ The following material is not placed in the public domain by this repository:
 - Any third-party models, source material, or derived portions identified in
   `assets/model-sources.json`; their individual licenses and attribution terms
   continue to apply.
+- The project-generated Gothic room artwork and Blender environment under
+  `assets/environment/` are included as original project contributions and are
+  covered by the CC0 dedication to the extent the contributors own them. Their
+  production provenance is recorded in `assets/environment/README.md`.
 - The private scan, model, and environment pack under `assets/local/`. Except
   for its empty tracked placeholder, that directory is intentionally excluded
   from Git and is not distributed by this repository.

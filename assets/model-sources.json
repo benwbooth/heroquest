@@ -1,12 +1,13 @@
 {
   "schema_version": 1,
   "edition": "original-us-1990",
-  "reviewed_utc": "2026-08-13",
+  "reviewed_utc": "2026-08-15",
   "runtime_root": "assets/local/editions/original-us/models",
   "notes": [
     "This file records sources and target slots; it does not redistribute third-party meshes.",
     "STL print files contain geometry only. The runtime target is an optimized GLB with repaired normals, a normalized 22 mm-square base scale, and explicit materials.",
-    "Uploader licenses do not remove the separate HeroQuest trademark, character, or sculpt rights. Keep exact classic scans in the gitignored local pack unless redistribution has been reviewed."
+    "Uploader licenses do not remove the separate HeroQuest trademark, character, or sculpt rights. Keep exact classic scans in the gitignored local pack unless redistribution has been reviewed.",
+    "The automated private bootstrap retrieves the Greengreenwine Google Drive collection directly and verifies assets/model-pack-sha256.txt. Per-slot source entries retain the preferred original author pages for attribution and license review."
   ],
   "sources": {
     "project-authored": {
@@ -111,7 +112,7 @@
       "license": "mixed-and-unverified-private-local-use-only",
       "format": "STL",
       "textures": false,
-      "notes": "Historical private research index only; it is not a runtime source or fallback. Never redistribute material from this mixed-license collection."
+      "notes": "Direct first-run bootstrap source for private local conversion. The project records preferred per-piece author pages separately and does not redistribute this mixed-license collection."
     }
   },
   "slots": [

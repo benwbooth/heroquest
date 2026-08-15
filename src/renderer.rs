@@ -7056,7 +7056,13 @@ fn load_environment_backdrop(
         .or_else(|| std::env::var_os("HEROQUEST_ROOM_MATTE"))
         .map(PathBuf::from);
     let path = explicit.clone().unwrap_or_else(|| {
-        PathBuf::from("assets/local/environment/castle-great-hall-panorama-v1-4x.png")
+        [
+            PathBuf::from("assets/local/environment/castle-great-hall-panorama-v1-4x.png"),
+            PathBuf::from("assets/environment/castle-great-hall-panorama-v1-4x.png"),
+        ]
+        .into_iter()
+        .find(|candidate| candidate.is_file())
+        .unwrap_or_else(|| PathBuf::from("assets/environment/castle-great-hall-panorama-v1-4x.png"))
     });
     if !path.is_file() {
         if explicit.is_some() {
@@ -7228,9 +7234,15 @@ fn load_environment_mesh(
     output_format: wgpu::TextureFormat,
 ) -> Result<Option<EnvironmentMesh>> {
     let explicit = std::env::var_os("HEROQUEST_ROOM_MODEL").map(PathBuf::from);
-    let path = explicit
-        .clone()
-        .unwrap_or_else(|| PathBuf::from("assets/local/environment/castle-great-hall.glb"));
+    let path = explicit.clone().unwrap_or_else(|| {
+        [
+            PathBuf::from("assets/local/environment/castle-great-hall.glb"),
+            PathBuf::from("assets/environment/castle-great-hall.glb"),
+        ]
+        .into_iter()
+        .find(|candidate| candidate.is_file())
+        .unwrap_or_else(|| PathBuf::from("assets/environment/castle-great-hall.glb"))
+    });
     if !path.is_file() {
         if explicit.is_some() {
             return Err(anyhow!(

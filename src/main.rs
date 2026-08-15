@@ -2,7 +2,7 @@ use std::{
     collections::VecDeque,
     mem::MaybeUninit,
     path::{Path, PathBuf},
-    process::Command,
+    process::{Command, Stdio},
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
@@ -467,38 +467,37 @@ fn original_us_art_root() -> PathBuf {
     )
 }
 
-fn original_us_scan_art_is_installed() -> bool {
-    let root = original_us_art_root();
-    [
-        root.join("board-runtime.jpg"),
-        root.join("startup/box/top.jpg"),
-        root.join("screen/information-screen-front.png"),
-        root.join("tabletop/player/character-sheet.png"),
-        root.join("components/doors/open.png"),
-        root.join("dice/skull.png"),
-    ]
-    .into_iter()
-    .all(|path| path.is_file())
-}
-
-fn original_us_installer_path() -> Option<PathBuf> {
+fn asset_installer_path() -> Option<PathBuf> {
     if let Some(path) = std::env::var_os("HEROQUEST_ASSET_INSTALLER").map(PathBuf::from) {
         return path.is_file().then_some(path);
     }
-    let source_tree =
-        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tools/install-original-us-scan-pack.sh");
+    let source_tree = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tools/install-all-assets.sh");
     if source_tree.is_file() {
         return Some(source_tree);
     }
     std::env::current_exe()
         .ok()
         .and_then(|executable| executable.parent().map(Path::to_path_buf))
-        .map(|directory| directory.join("tools/install-original-us-scan-pack.sh"))
+        .map(|directory| directory.join("tools/install-all-assets.sh"))
         .filter(|path| path.is_file())
 }
 
-fn confirm_and_install_original_us_scan_art() -> Result<bool> {
-    if original_us_scan_art_is_installed() {
+fn complete_runtime_assets_are_installed() -> bool {
+    let Some(installer) = asset_installer_path() else {
+        return false;
+    };
+    Command::new("bash")
+        .arg(installer)
+        .arg("--check")
+        .env("HEROQUEST_ART_DIR", original_us_art_root())
+        .stdout(Stdio::null())
+        .stderr(Stdio::null())
+        .status()
+        .is_ok_and(|status| status.success())
+}
+
+fn confirm_and_install_complete_runtime_assets() -> Result<bool> {
+    if complete_runtime_assets_are_installed() {
         return Ok(true);
     }
 
@@ -514,13 +513,16 @@ fn confirm_and_install_original_us_scan_art() -> Result<bool> {
             text: "Quit",
         },
     ];
-    let warning = "The original-US scanned artwork is not installed.\n\n\
+    let warning = "The complete HeroQuest runtime asset set is not installed.\n\n\
         If you continue, HeroQuest 3D will request HQ Game System US.rar directly from \
-        heroquestadventure.com. This project does not host or relay the archive. The download is \
-        about 1.77 GiB and preparation needs roughly 5 GiB of free disk space.\n\n\
+        heroquestadventure.com and the classic STL collection directly from its public Google \
+        Drive folder. The project does not host or relay either collection. Bundled \
+        project-authored and AI-generated castle assets are already included in this checkout. \
+        External downloads total about 2.45 GiB and preparation needs roughly 7 GiB of free disk \
+        space.\n\n\
         HeroQuest artwork, names, and trademarks belong to their respective owners. You are \
         responsible for determining whether downloading and using these files is permitted where \
-        you live and under the source site's terms. This fan project is not affiliated with or \
+        you live and under the source sites' terms. This fan project is not affiliated with or \
         endorsed by Hasbro or Avalon Hill.\n\n\
         Select I Accept - Download to assume responsibility and continue, or Quit to leave the \
         files untouched.";
@@ -528,7 +530,7 @@ fn confirm_and_install_original_us_scan_art() -> Result<bool> {
         show_message_box(
             MessageBoxFlag::WARNING,
             &buttons,
-            "Original-US artwork download",
+            "Complete HeroQuest asset installation",
             warning,
             None,
             None,
@@ -540,8 +542,8 @@ fn confirm_and_install_original_us_scan_art() -> Result<bool> {
         return Ok(false);
     }
 
-    let installer = original_us_installer_path().context(
-        "the original-US asset installer is not available beside this build; set \
+    let installer = asset_installer_path().context(
+        "the complete asset installer is not available beside this build; set \
          HEROQUEST_ASSET_INSTALLER to its path",
     )?;
     let status = Command::new("bash")
@@ -551,11 +553,11 @@ fn confirm_and_install_original_us_scan_art() -> Result<bool> {
         .status()
         .with_context(|| format!("failed to launch asset installer {}", installer.display()))?;
     if !status.success() {
-        anyhow::bail!("original-US asset installer exited with {status}");
+        anyhow::bail!("complete asset installer exited with {status}");
     }
     anyhow::ensure!(
-        original_us_scan_art_is_installed(),
-        "asset installer finished without producing the complete runtime scan pack"
+        complete_runtime_assets_are_installed(),
+        "asset installer finished without producing the complete runtime asset set"
     );
     Ok(true)
 }
@@ -612,16 +614,16 @@ fn main() -> Result<()> {
 
     let sdl = sdl3::init()?;
     let video = sdl.video()?;
-    match confirm_and_install_original_us_scan_art() {
+    match confirm_and_install_complete_runtime_assets() {
         Ok(true) => {}
         Ok(false) => return Ok(()),
         Err(error) => {
             let _ = show_simple_message_box(
                 MessageBoxFlag::ERROR,
-                "Original-US artwork installation failed",
+                "HeroQuest asset installation failed",
                 &format!(
-                    "HeroQuest 3D could not prepare the scan-backed artwork:\n\n{error:#}\n\n\
-                     The partial download is retained so the next attempt can resume."
+                    "HeroQuest 3D could not prepare every required runtime asset:\n\n{error:#}\n\n\
+                     Partial downloads are retained so the next attempt can resume."
                 ),
                 None,
             );

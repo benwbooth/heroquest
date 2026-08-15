@@ -14,16 +14,19 @@
           default = pkgs.mkShell {
             nativeBuildInputs = with pkgs; [
               cargo
+              blender
               clippy
               cmake
               curl
               imagemagick
+              jq
               ninja
               pkg-config
               poppler-utils
               rustc
               rustfmt
               unrar-free
+              uv
             ];
 
             buildInputs = with pkgs; [

@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "edition": "original-us-1990",
+  "reviewed_utc": "2026-08-15",
+  "families": [
+    {
+      "id": "original-us-print-art",
+      "coverage": [
+        "board",
+        "box",
+        "66 playing cards",
+        "4 character cards",
+        "character sheet",
+        "identification guide and armory",
+        "instruction booklet",
+        "14-quest book",
+        "tile sheets",
+        "information screen",
+        "posters",
+        "survey and order-form extras",
+        "dice decals",
+        "cardboard furniture, door, and marker art"
+      ],
+      "delivery": "downloaded-directly-on-first-run",
+      "source_url": "http://heroquestadventure.com/scans/HQ%20Game%20System%20US/HQ%20Game%20System%20US.rar",
+      "source_bytes": 1902474536,
+      "source_sha256": "a7d3ae6c71c8de3c517dd6667d7ab4a8cce3046e80e96ad2ef470f5ef8ec74db",
+      "local_root": "assets/local/editions/original-us",
+      "installer": "tools/install-original-us-scan-pack.sh",
+      "audit": "tools/audit-original-us-scan-art.sh",
+      "redistribution": "not-included-in-git"
+    },
+    {
+      "id": "classic-stl-geometry",
+      "coverage": [
+        "all 4 Hero sculpts",
+        "all base-game monster families and sculpt variants",
+        "all 11 assembled furniture types",
+        "trap and secret-door relief geometry",
+        "optional 1x1 and 1x2 presentation walls"
+      ],
+      "delivery": "downloaded-directly-on-first-run",
+      "source_url": "https://drive.google.com/drive/folders/1t-CAUKRnYzHFjuWopB0L0RKoyBeyW-MD",
+      "source_bytes": 705614733,
+      "source_file_count": 42,
+      "checksum_manifest": "assets/model-pack-sha256.txt",
+      "local_source_root": "assets/local/sources/greengreenwine-community-pack",
+      "local_runtime_root": "assets/local/editions/original-us/models",
+      "converter": "tools/import-classic-stl-pack.py",
+      "provenance": "assets/model-sources.json",
+      "redistribution": "mixed-and-unverified-private-local-use-only"
+    },
+    {
+      "id": "project-authored-3d-complements",
+      "coverage": [
+        "combat and movement dice",
+        "open and closed door stands",
+        "weapon rack",
+        "blocked-square and skull markers",
+        "rat and skull furniture dressing",
+        "quest-specific notched-sword and staff Orc variants"
+      ],
+      "delivery": "generated-locally",
+      "builders": [
+        "tools/build-project-models.py",
+        "tools/build-orc-variants.py"
+      ],
+      "local_runtime_root": "assets/local/editions/original-us/models",
+      "audit": "tools/audit-local-models.sh"
+    },
+    {
+      "id": "castle-room-environment",
+      "coverage": [
+        "2:1 spherical room panorama",
+        "foreground room GLB",
+        "Blender source",
+        "procedural room textures",
+        "reference, matte, and preview images"
+      ],
+      "delivery": "included-in-git",
+      "root": "assets/environment",
+      "provenance": "assets/environment/README.md",
+      "panorama_sha256": "03e690428fcdce09109b1574c70ebdf3828b0d67f4242bc443110ef7a6a566eb",
+      "glb_sha256": "a4662ef016ae8a1d3f9e32e211894920ae141c71b8a633412c5c91ab94b02ea1"
+    },
+    {
+      "id": "ui-font",
+      "coverage": [
+        "Almendra medieval-style UI typeface"
+      ],
+      "delivery": "included-in-git",
+      "source_url": "https://github.com/google/fonts/tree/main/ofl/almendra",
+      "license": "SIL-OFL-1.1",
+      "font_path": "assets/fonts/Almendra-Regular.ttf",
+      "license_path": "assets/fonts/Almendra-OFL.txt",
+      "sha256": "b127a6121209353b53da9ce73bf9d350f74190d8384c28ede179e4fb9440f946"
+    },
+    {
+      "id": "game-audio",
+      "coverage": [
+        "dice impacts",
+        "movement",
+        "attack and damage",
+        "spells",
+        "doors",
+        "search",
+        "turn and quest cues"
+      ],
+      "delivery": "synthesized-at-runtime",
+      "implementation": "src/audio.rs",
+      "external_files": false
+    },
+    {
+      "id": "rules-and-quest-data",
+      "coverage": [
+        "14 original-US quest definitions",
+        "cards, spells, equipment, monsters, and executable rules data"
+      ],
+      "delivery": "included-as-machine-readable-project-data-and-code",
+      "roots": [
+        "assets/quests",
+        "src"
+      ],
+      "reference": "private original-US rulebook, quest-book, card, and Armory scans"
+    }
+  ]
+}

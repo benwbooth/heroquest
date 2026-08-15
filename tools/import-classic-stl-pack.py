@@ -74,6 +74,8 @@ MODELS = (
     Model("markers/pit-trap.glb", ("Tiles/PitTrap2.stl",), 80_000),
     Model("markers/falling-block-trap.glb", ("Tiles/WeakFloorTile.stl",), 80_000),
     Model("markers/secret-door.glb", ("Tiles/TrapDoorTile_solid.stl",), 80_000),
+    Model("walls/wall-1x1.glb", ("Tiles/1x1WallTile_Solid.stl",), 80_000),
+    Model("walls/wall-1x2.glb", ("Tiles/1x2WallTile_Solid.stl",), 80_000),
 )
 
 

@@ -7,8 +7,11 @@ scans, and a visual check of the original component galleries. It does not mix
 in the 1989 UK rules, the 2021 remake, or expansion pieces.
 
 The machine-readable source and license matrix is
-`assets/model-sources.json`. Model files themselves belong in the gitignored
-`assets/local/editions/original-us/models/` tree.
+`assets/model-sources.json`. External model files themselves belong in the
+gitignored `assets/local/editions/original-us/models/` tree. The complete
+first-run path is `tools/install-all-assets.sh`; it downloads the public source
+pack, converts the STL files, generates project-authored complements, and runs
+the same audit used by the game.
 
 ## Figures: 35 physical pieces, 18 distinct meshes
 
@@ -145,8 +148,9 @@ need UI surfaces and interaction, not photogrammetry or AI mesh conversion.
 
 ## Conversion pipeline
 
-1. Download each licensed STL manually from its recorded model page into
-   `models/source/`; retain author, URL, license, and original filename.
+1. Download the source collection directly with `tools/install-all-assets.sh`,
+   or acquire each licensed STL manually from its recorded model page; retain
+   author, URL, license, and original filename.
 2. Repair non-manifold scan geometry, join multipart figures such as the
    Gargoyle, and restore the common classic square base without changing the
    silhouette.
