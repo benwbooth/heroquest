@@ -1,0 +1,837 @@
+{
+  "title": "Quest for the Spirit Blade",
+  "blurb": "Find the ancient Spirit Blade in the ruined temple and return it safely. Only this Dwarf-forged weapon can harm the awakened Witch Lord.",
+  "source": {
+    "edition": "HeroQuest original US release",
+    "book": "Quest Book",
+    "page": 15
+  },
+  "corridors": [
+    {
+      "area": {
+        "x": 0,
+        "y": 0,
+        "width": 26,
+        "height": 19
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.25
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "name": "Northwest Guardroom",
+      "area": {
+        "x": 1,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.36,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Northwest Library",
+      "area": {
+        "x": 5,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.25,
+        0.31,
+        0.22
+      ]
+    },
+    {
+      "name": "Northwest Cellar",
+      "area": {
+        "x": 1,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.29,
+        0.30
+      ]
+    },
+    {
+      "name": "Northwest Hall",
+      "area": {
+        "x": 5,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.31,
+        0.22,
+        0.17
+      ]
+    },
+    {
+      "name": "Northern Gallery",
+      "area": {
+        "x": 9,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.30,
+        0.24
+      ]
+    },
+    {
+      "name": "Northern Shrine",
+      "area": {
+        "x": 14,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.42,
+        0.28,
+        0.16
+      ]
+    },
+    {
+      "name": "Northeast Forge",
+      "area": {
+        "x": 17,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.39,
+        0.19,
+        0.14
+      ]
+    },
+    {
+      "name": "Northeast Store",
+      "area": {
+        "x": 21,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.28,
+        0.31,
+        0.20
+      ]
+    },
+    {
+      "name": "Northeast Chapel",
+      "area": {
+        "x": 17,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.25,
+        0.34
+      ]
+    },
+    {
+      "name": "Northeast Vault",
+      "area": {
+        "x": 21,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.34,
+        0.24,
+        0.14
+      ]
+    },
+    {
+      "name": "Central Crypt",
+      "area": {
+        "x": 10,
+        "y": 7,
+        "width": 6,
+        "height": 5
+      },
+      "tint": [
+        0.29,
+        0.16,
+        0.22
+      ]
+    },
+    {
+      "name": "West Guardroom",
+      "area": {
+        "x": 1,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.33,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Treasure Room B",
+      "area": {
+        "x": 5,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.22
+      ]
+    },
+    {
+      "name": "West Dining Room",
+      "area": {
+        "x": 7,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.28,
+        0.24,
+        0.18
+      ]
+    },
+    {
+      "name": "Southwest Barracks",
+      "area": {
+        "x": 1,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.23,
+        0.31
+      ]
+    },
+    {
+      "name": "Southwest Hall",
+      "area": {
+        "x": 5,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.39,
+        0.29,
+        0.14
+      ]
+    },
+    {
+      "name": "Southern Gallery",
+      "area": {
+        "x": 9,
+        "y": 13,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.28,
+        0.23,
+        0.18
+      ]
+    },
+    {
+      "name": "Southern Guardroom",
+      "area": {
+        "x": 14,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.25,
+        0.28,
+        0.25
+      ]
+    },
+    {
+      "name": "Southeast Antechamber",
+      "area": {
+        "x": 18,
+        "y": 10,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.30,
+        0.19,
+        0.16
+      ],
+      "additional_areas": [
+        {
+          "x": 17,
+          "y": 10,
+          "width": 1,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "name": "Eastern Crypt",
+      "area": {
+        "x": 21,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.20
+      ]
+    },
+    {
+      "name": "Southeast Tomb",
+      "area": {
+        "x": 18,
+        "y": 14,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.32
+      ]
+    },
+    {
+      "name": "Spirit Blade Shrine A",
+      "area": {
+        "x": 21,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.37,
+        0.21,
+        0.18
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "x": 12,
+      "y": 5
+    },
+    {
+      "x": 13,
+      "y": 5
+    },
+    {
+      "x": 0,
+      "y": 7
+    },
+    {
+      "x": 6,
+      "y": 9
+    },
+    {
+      "x": 20,
+      "y": 9
+    },
+    {
+      "x": 0,
+      "y": 11
+    },
+    {
+      "x": 1,
+      "y": 18
+    },
+    {
+      "x": 24,
+      "y": 18
+    }
+  ],
+  "solid_rock": [
+    "##########################",
+    "##########################",
+    "##########################",
+    "##########################",
+    "##########################",
+    "############..###....#####",
+    "#########............#####",
+    ".########............#####",
+    ".########............#####",
+    ".....................#####",
+    ".................#########",
+    ".................#########",
+    "#................#########",
+    "#........###..############",
+    "#........###..####.......#",
+    "#........###..####.......#",
+    "#........###..####.......#",
+    "#........###..####.......#",
+    "#........................#"
+  ],
+  "doors": [
+    {
+      "a": {
+        "x": 12,
+        "y": 6
+      },
+      "b": {
+        "x": 12,
+        "y": 7
+      }
+    },
+    {
+      "a": {
+        "x": 2,
+        "y": 9
+      },
+      "b": {
+        "x": 2,
+        "y": 10
+      }
+    },
+    {
+      "a": {
+        "x": 7,
+        "y": 9
+      },
+      "b": {
+        "x": 7,
+        "y": 10
+      }
+    },
+    {
+      "a": {
+        "x": 9,
+        "y": 9
+      },
+      "b": {
+        "x": 10,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 15,
+        "y": 9
+      },
+      "b": {
+        "x": 16,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 19,
+        "y": 8
+      },
+      "b": {
+        "x": 19,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 11
+      },
+      "b": {
+        "x": 5,
+        "y": 11
+      }
+    },
+    {
+      "a": {
+        "x": 12,
+        "y": 11
+      },
+      "b": {
+        "x": 12,
+        "y": 12
+      }
+    },
+    {
+      "a": {
+        "x": 2,
+        "y": 13
+      },
+      "b": {
+        "x": 2,
+        "y": 14
+      }
+    },
+    {
+      "a": {
+        "x": 3,
+        "y": 17
+      },
+      "b": {
+        "x": 3,
+        "y": 18
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 17
+      },
+      "b": {
+        "x": 5,
+        "y": 17
+      }
+    },
+    {
+      "a": {
+        "x": 19,
+        "y": 17
+      },
+      "b": {
+        "x": 19,
+        "y": 18
+      }
+    },
+    {
+      "a": {
+        "x": 22,
+        "y": 17
+      },
+      "b": {
+        "x": 22,
+        "y": 18
+      }
+    }
+  ],
+  "secret_doors": [],
+  "hero_starts": [
+    {
+      "hero": "barbarian",
+      "pos": {
+        "x": 14,
+        "y": 7
+      }
+    },
+    {
+      "hero": "dwarf",
+      "pos": {
+        "x": 15,
+        "y": 7
+      }
+    },
+    {
+      "hero": "elf",
+      "pos": {
+        "x": 14,
+        "y": 8
+      }
+    },
+    {
+      "hero": "wizard",
+      "pos": {
+        "x": 15,
+        "y": 8
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "x": 14,
+      "y": 7
+    },
+    {
+      "x": 15,
+      "y": 7
+    },
+    {
+      "x": 14,
+      "y": 8
+    },
+    {
+      "x": 15,
+      "y": 8
+    }
+  ],
+  "monsters": [
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 2,
+        "y": 11
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 3,
+        "y": 11
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 3,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 16,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 12,
+        "y": 13
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 13,
+        "y": 13
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 1,
+        "y": 15
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 2,
+        "y": 15
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 6,
+        "y": 15
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 21,
+        "y": 15
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 22,
+        "y": 15
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 24,
+        "y": 15
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 6,
+        "y": 16
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 7,
+        "y": 16
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 22,
+        "y": 16
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 23,
+        "y": 16
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 2,
+        "y": 17
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 7,
+        "y": 17
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 12,
+        "y": 18
+      }
+    },
+    {
+      "monster": "mummy",
+      "pos": {
+        "x": 20,
+        "y": 17
+      }
+    }
+  ],
+  "allies": [],
+  "props": [
+    {
+      "prop": "stairs",
+      "pos": {
+        "x": 14,
+        "y": 7
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 6,
+        "y": 11
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "table",
+      "pos": {
+        "x": 6,
+        "y": 13
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "table",
+      "pos": {
+        "x": 3,
+        "y": 14
+      },
+      "rotation_quarters": 1
+    }
+  ],
+  "quest_items": [],
+  "traps": [
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 11,
+        "y": 6
+      }
+    },
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 14,
+        "y": 6
+      }
+    }
+  ],
+  "collapsing_ceiling_hazards": [
+    {
+      "x": 0,
+      "y": 9
+    },
+    {
+      "x": 19,
+      "y": 9
+    },
+    {
+      "x": 9,
+      "y": 11
+    },
+    {
+      "x": 12,
+      "y": 14
+    },
+    {
+      "x": 13,
+      "y": 16
+    },
+    {
+      "x": 19,
+      "y": 17
+    }
+  ],
+  "wandering_monster": "chaos_warrior",
+  "events": [
+    {
+      "id": "A",
+      "marker": {
+        "x": 23,
+        "y": 15
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Spirit Blade Shrine A"
+      },
+      "effect": {
+        "kind": "artifact",
+        "artifact": "spirit_blade"
+      },
+      "message": "The Hero discovers the Spirit Blade, the only weapon that can harm the Witch Lord."
+    },
+    {
+      "id": "B",
+      "marker": {
+        "x": 6,
+        "y": 12
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Treasure Room B"
+      },
+      "effect": {
+        "kind": "gold",
+        "amount": 200
+      },
+      "message": "The treasure chest contains 200 gold coins."
+    }
+  ],
+  "objective": {
+    "kind": "find_artifact_and_return",
+    "artifact": "spirit_blade"
+  }
+}

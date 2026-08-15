@@ -1,0 +1,565 @@
+{
+  "schema_version": 1,
+  "edition": "original-us-1990",
+  "reviewed_utc": "2026-08-13",
+  "runtime_root": "assets/local/editions/original-us/models",
+  "notes": [
+    "This file records sources and target slots; it does not redistribute third-party meshes.",
+    "STL print files contain geometry only. The runtime target is an optimized GLB with repaired normals, a normalized 22 mm-square base scale, and explicit materials.",
+    "Uploader licenses do not remove the separate HeroQuest trademark, character, or sculpt rights. Keep exact classic scans in the gitignored local pack unless redistribution has been reviewed."
+  ],
+  "sources": {
+    "project-authored": {
+      "url": null,
+      "author": "HeroQuest 3D board project",
+      "license": "project-license",
+      "format": "GLB",
+      "textures": true,
+      "notes": "Simple runtime geometry authored for this implementation from component measurements and private visual reference."
+    },
+    "project-authored-from-private-scan": {
+      "url": null,
+      "author": "HeroQuest 3D board project",
+      "license": "private-local-use",
+      "format": "GLB and PNG",
+      "textures": true,
+      "notes": "Geometry can be source-controlled; scan-derived textures remain in the gitignored local art pack."
+    },
+    "classic-scan-weapon-kitbash": {
+      "url": "https://www.thingiverse.com/thing:3771123",
+      "author": "Carlbark scan with HeroQuest 3D board project weapon geometry",
+      "license": "CC-BY-4.0 base scan plus project-license additions",
+      "format": "GLB",
+      "textures": false,
+      "notes": "Retains the licensed classic square-base Orc scan. The notched captain blade follows original-US miniature photographs and the CC-BY Pekk-O modification description; Grak's staff is quest-specific project geometry because no staff-Orc sculpt existed in the box."
+    },
+    "original_us_scan_pack": {
+      "url": null,
+      "author": "user-owned local scan pack",
+      "license": "private-local-use",
+      "format": "PNG and PDF",
+      "textures": true,
+      "notes": "Already installed under assets/local/editions/original-us; source for board, cardboard furniture inserts, door inserts, markers, dice symbols, and both faces of the Information Screen."
+    },
+    "original_us_furniture_fitting_reference": {
+      "url": "https://www.ebay.com/itm/166187306177",
+      "author": "photographs of original Milton Bradley components",
+      "license": "visual-reference-only",
+      "format": "photographs",
+      "textures": false,
+      "notes": "Multiple original-set photographs were cross-checked for the tiny crouched rat, rounded skull, underside peg, and common removable placement on bookcases, cupboard, fireplace, and torture rack. No photograph pixels or third-party mesh are distributed."
+    },
+    "carlbark_classic_scans": {
+      "url": "https://cults3d.com/en/users/Carlbark/3d-models",
+      "author": "Carlbark",
+      "license": "CC-BY-4.0",
+      "format": "STL",
+      "textures": false,
+      "notes": "Direct scans of the classic figures. Individual model pages repeat the CC BY 4.0 license and identify the original Thingiverse publication date."
+    },
+    "alexandershalin_notched_orc": {
+      "url": "https://cults3d.com/en/3d-model/game/heroquest-orc-with-notched-sword-circle-base",
+      "author": "alexandershalin",
+      "license": "CC-BY-4.0",
+      "format": "STL",
+      "textures": false,
+      "notes": "Classic notched-sword Orc variant on a round 25 mm base; replace the round base with the common classic square base during conversion."
+    },
+    "erivelton_goblin_short_sword": {
+      "url": "https://cults3d.com/en/3d-model/game/heroquest-goblin-short-sword",
+      "author": "Erivelton",
+      "license": "CC-BY-4.0",
+      "format": "STL",
+      "textures": false,
+      "notes": "Restores the third classic Goblin weapon using Carlbark and Springer scan geometry."
+    },
+    "tronic3100_base_furniture": {
+      "url": "https://cults3d.com/en/3d-model/game/heroquest-base-game-furniture-tile-pack-easy-print",
+      "author": "Tronic3100",
+      "license": "CC-BY-NC-4.0",
+      "format": "STL",
+      "textures": false,
+      "notes": "Twenty files covering every base-game furniture type, both doors, stairs, and the principal cardboard markers. Noncommercial restriction means local/private use only."
+    },
+    "enfenix_wall_tiles": {
+      "url": "https://cults3d.com/en/3d-model/game/heroquest-floor-wall-tiles",
+      "author": "enfenix",
+      "license": "CC-BY-NC-SA-4.0",
+      "format": "STL",
+      "textures": false,
+      "notes": "One- and two-square solid wall tiles. These are an optional 3D-board enhancement; the original box contains no freestanding wall pieces."
+    },
+    "thingiverse_combat_die": {
+      "url": "https://www.thingiverse.com/thing:3147376",
+      "author": "THX0785",
+      "license": "unverified-at-source",
+      "format": "STL",
+      "textures": false,
+      "notes": "Exact printable combat-die geometry exists, but the current Thingiverse page did not expose reliable license metadata. Prefer the project-authored die and local scan-derived face decals."
+    },
+    "complete_print_pack_reference": {
+      "url": "https://www.reddit.com/r/PrintedMinis/comments/d6ncr3/printed_heroquest_minis_furniture_doors_tiles_dice/",
+      "author": "u/king-of-hearts",
+      "license": "mixed-and-unverified",
+      "format": "STL",
+      "textures": false,
+      "notes": "Useful private research index, not an approved redistributable source. It changes bases and reconstructs missing weapons without a per-file license manifest."
+    },
+    "greengreenwine_community_pack": {
+      "url": "https://drive.google.com/drive/folders/1t-CAUKRnYzHFjuWopB0L0RKoyBeyW-MD",
+      "author": "Greengreenwine community collection",
+      "license": "mixed-and-unverified-private-local-use-only",
+      "format": "STL",
+      "textures": false,
+      "notes": "Historical private research index only; it is not a runtime source or fallback. Never redistribute material from this mixed-license collection."
+    }
+  },
+  "slots": [
+    {
+      "id": "figure.barbarian",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/barbarian.glb",
+      "material": "hero-red-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-barbarian",
+      "source_files": ["Hero_Quest_-_Barbarian_v2.stl"]
+    },
+    {
+      "id": "figure.dwarf",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/dwarf.glb",
+      "material": "hero-red-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-dwarf",
+      "source_files": ["Hero_Quest_-_Dwarf.stl"]
+    },
+    {
+      "id": "figure.elf",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/elf.glb",
+      "material": "hero-red-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-elf",
+      "source_files": ["Hero_Quest_-_Elf.stl"]
+    },
+    {
+      "id": "figure.wizard",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/wizard.glb",
+      "material": "hero-red-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-wizard-carlbark",
+      "source_files": ["HeroQuest_-_Wizard.stl"]
+    },
+    {
+      "id": "figure.orc-sword",
+      "category": "figure",
+      "physical_count": 3,
+      "runtime_path": "figures/orc-sword.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-orcs",
+      "source_files": ["HeroQuest_-_Orc_Sword.stl"]
+    },
+    {
+      "id": "figure.orc-flail",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/orc-flail.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-orcs",
+      "source_files": ["HeroQuest_-_Orc_Morningstar.stl"]
+    },
+    {
+      "id": "figure.orc-cleaver",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/orc-cleaver.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-orcs",
+      "source_files": ["HeroQuest_-_Orc_Meat_cleaver.stl"]
+    },
+    {
+      "id": "figure.orc-notched-sword",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/orc-notched-sword.glb",
+      "material": "greenskin-green-plastic",
+      "source": "classic-scan-weapon-kitbash",
+      "source_url": "https://www.thingiverse.com/thing:3771123",
+      "source_files": ["figures/orc-sword.glb", "tools/build-orc-variants.py"],
+      "notes": "Built locally from the classic scanned Orc with a photographed original-US enlarged keyhole-notched blade silhouette and the original square base."
+    },
+    {
+      "id": "figure.orc-staff",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/orc-staff.glb",
+      "material": "greenskin-green-plastic",
+      "source": "classic-scan-weapon-kitbash",
+      "source_url": null,
+      "source_files": ["figures/orc-sword.glb", "tools/build-orc-variants.py"],
+      "notes": "Quest 6 describes Grak holding an Armory staff, although the box has no separate staff-Orc sculpt. This installed local variant retains the licensed classic Orc scan and replaces only its sword with project-authored staff geometry."
+    },
+    {
+      "id": "figure.goblin-sword",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/goblin-sword.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-goblins-carlbark",
+      "source_files": ["HeroQuest_-_Goblin_Sword.stl"]
+    },
+    {
+      "id": "figure.goblin-axe",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/goblin-axe.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-goblins-carlbark",
+      "source_files": ["HeroQuest_-_Goblin_Axe.stl"]
+    },
+    {
+      "id": "figure.goblin-scimitar",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/goblin-scimitar.glb",
+      "material": "greenskin-green-plastic",
+      "source": "erivelton_goblin_short_sword",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-goblin-short-sword",
+      "source_files": ["HeroQuest_-_Goblin_Short_Sword.stl"]
+    },
+    {
+      "id": "figure.fimir",
+      "category": "figure",
+      "physical_count": 3,
+      "runtime_path": "figures/fimir.glb",
+      "material": "greenskin-green-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-fimir-carlbark",
+      "source_files": ["HeroQuest_-_Fimir.stl"]
+    },
+    {
+      "id": "figure.chaos-warrior",
+      "category": "figure",
+      "physical_count": 4,
+      "runtime_path": "figures/chaos-warrior.glb",
+      "material": "chaos-gray-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-chaos-warrior-carlbark",
+      "source_files": ["HeroQuest_-_Chaos_Warrior.stl"]
+    },
+    {
+      "id": "figure.chaos-warlock",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/chaos-warlock.glb",
+      "material": "chaos-gray-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-chaos-mage-carlbark",
+      "source_files": ["HeroQuest_-_Chaos_Mage.stl"]
+    },
+    {
+      "id": "figure.gargoyle",
+      "category": "figure",
+      "physical_count": 1,
+      "runtime_path": "figures/gargoyle.glb",
+      "material": "chaos-gray-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-gargoyle",
+      "source_files": ["HeroQuest_-_Gargoyle.stl", "HeroQuest_-_Gargoyle_Wings.stl"]
+    },
+    {
+      "id": "figure.skeleton",
+      "category": "figure",
+      "physical_count": 4,
+      "runtime_path": "figures/skeleton.glb",
+      "material": "undead-ivory-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-skeleton-carlbark",
+      "source_files": ["HeroQuest_-_Skeleton.stl"]
+    },
+    {
+      "id": "figure.zombie",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/zombie.glb",
+      "material": "undead-ivory-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-zombie-carlbark",
+      "source_files": ["HeroQuest_-_Zombie.stl"]
+    },
+    {
+      "id": "figure.mummy",
+      "category": "figure",
+      "physical_count": 2,
+      "runtime_path": "figures/mummy.glb",
+      "material": "undead-ivory-plastic",
+      "source": "carlbark_classic_scans",
+      "source_url": "https://cults3d.com/en/3d-model/game/heroquest-mummy-carlbark",
+      "source_files": ["HeroQuest_-_Mummy.stl"]
+    },
+    {
+      "id": "furniture.table",
+      "category": "furniture",
+      "physical_count": 2,
+      "runtime_path": "furniture/table.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["table.stl"]
+    },
+    {
+      "id": "furniture.throne",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/throne.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["throne.stl"]
+    },
+    {
+      "id": "furniture.alchemists-bench",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/alchemists-bench.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["AlchemyTable.stl"],
+      "attachments": ["bottles", "scales"]
+    },
+    {
+      "id": "furniture.treasure-chest",
+      "category": "furniture",
+      "physical_count": 3,
+      "runtime_path": "furniture/treasure-chest.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Chest.stl"]
+    },
+    {
+      "id": "furniture.tomb",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/tomb.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Tomb.stl"]
+    },
+    {
+      "id": "furniture.sorcerers-table",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/sorcerers-table.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["ScorcererTable.stl"],
+      "attachments": ["two-candlesticks"]
+    },
+    {
+      "id": "furniture.bookcase",
+      "category": "furniture",
+      "physical_count": 2,
+      "runtime_path": "furniture/bookcase.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Bookcase.stl"]
+    },
+    {
+      "id": "furniture.torture-rack",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/torture-rack.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["TotureRack.stl"]
+    },
+    {
+      "id": "furniture.fireplace",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/fireplace.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Fireplace.stl"]
+    },
+    {
+      "id": "furniture.weapons-rack",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/weapons-rack.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Weaponrack.stl"]
+    },
+    {
+      "id": "furniture.cupboard",
+      "category": "furniture",
+      "physical_count": 1,
+      "runtime_path": "furniture/cupboard.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["Buffet.stl"]
+    },
+    {
+      "id": "furniture-dressing.rat",
+      "category": "furniture-dressing",
+      "physical_count": 4,
+      "runtime_path": "dressing/rat.glb",
+      "material": "brown-plastic",
+      "source": "project-authored",
+      "reference_source": "original_us_furniture_fitting_reference",
+      "notes": "Reproducible photograph-matched crouched rat with molded fur, pointed muzzle, ears, paws, whiskers, raised tapering tail, and the original underside furniture peg."
+    },
+    {
+      "id": "furniture-dressing.skull",
+      "category": "furniture-dressing",
+      "physical_count": 4,
+      "runtime_path": "dressing/skull.glb",
+      "material": "ivory-plastic",
+      "source": "project-authored",
+      "reference_source": "original_us_furniture_fitting_reference",
+      "notes": "Reproducible photograph-matched small skull with recessed eyes and nose, individual teeth, jaw, cheekbones, and the original underside furniture peg."
+    },
+    {
+      "id": "door.open",
+      "category": "door",
+      "physical_count": 16,
+      "runtime_path": "doors/open.glb",
+      "source": "project-authored-from-private-scan",
+      "source_files": ["tools/build-project-models.py"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Low plastic clip holds one thin, two-sided scan-derived cardboard arch, matching the original physical construction."
+    },
+    {
+      "id": "door.closed",
+      "category": "door",
+      "physical_count": 5,
+      "runtime_path": "doors/closed.glb",
+      "source": "project-authored-from-private-scan",
+      "source_files": ["tools/build-project-models.py"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Low plastic clip holds one thin, two-sided scan-derived cardboard door, matching the original physical construction."
+    },
+    {
+      "id": "die.combat",
+      "category": "die",
+      "physical_count": 6,
+      "runtime_path": "dice/combat.glb",
+      "source": "project-authored",
+      "reference_source": "thingiverse_combat_die",
+      "texture_source": "original_us_scan_pack",
+      "notes": "Author a balanced rounded cube with 3 skull, 2 white-shield, and 1 black-shield faces; preserve the current Rapier rigid body."
+    },
+    {
+      "id": "die.movement",
+      "category": "die",
+      "physical_count": 2,
+      "runtime_path": "dice/movement.glb",
+      "source": "project-authored",
+      "notes": "Conventional red d6 with recessed or decal pips; preserve the current Rapier rigid body."
+    },
+    {
+      "id": "screen.information-screen",
+      "category": "screen",
+      "physical_count": 1,
+      "runtime_path": "screen/information-screen-front.png",
+      "additional_runtime_paths": ["screen/information-screen-back.png"],
+      "runtime_root": "art",
+      "source": "project-authored-from-private-scan",
+      "texture_source": "original_us_scan_pack",
+      "notes": "Thin three-panel folded cardboard mesh is authored in renderer.rs. Front art is on tile-sheet page 1 and rules/monster-chart art is on page 2. No plastic base or separate shield miniature existed in the original box."
+    },
+    {
+      "id": "marker.stairs",
+      "category": "marker",
+      "physical_count": 1,
+      "runtime_path": "components/markers/stairs.png",
+      "runtime_root": "art",
+      "source": "project-authored-from-private-scan",
+      "source_files": ["tools/extract-original-us-components.sh"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Flat 2x2 punchboard stairway cutout cropped from original-US tile-sheet page 1; it is not a 3D printed relief model."
+    },
+    {
+      "id": "marker.blocked-square-1x1",
+      "category": "marker",
+      "physical_count": 23,
+      "runtime_path": "markers/blocked-square-1x1.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["rock-tile.stl"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Count includes 12 skull/block, 3 pit/block, and 8 falling-block/block double-sided markers."
+    },
+    {
+      "id": "marker.blocked-square-1x2",
+      "category": "marker",
+      "physical_count": 2,
+      "runtime_path": "markers/blocked-square-1x2.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["rock-tile-x2.stl"],
+      "texture_source": "original_us_scan_pack"
+    },
+    {
+      "id": "marker.pit-trap",
+      "category": "marker",
+      "physical_count": 6,
+      "runtime_path": "markers/pit-trap.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["trap-tile.stl"],
+      "texture_source": "original_us_scan_pack"
+    },
+    {
+      "id": "marker.secret-door",
+      "category": "marker",
+      "physical_count": 7,
+      "runtime_path": "markers/secret-door.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["secretdoor-tile.stl"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Three share pit/block markers and four share falling-block markers; the count is face availability, not seven extra cardboard pieces."
+    },
+    {
+      "id": "marker.falling-block-trap",
+      "category": "marker",
+      "physical_count": 12,
+      "runtime_path": "markers/falling-block-trap.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["rock-tile.stl"],
+      "texture_source": "original_us_scan_pack",
+      "notes": "Four share secret-door faces and eight share blocked-square faces."
+    },
+    {
+      "id": "marker.skull",
+      "category": "marker",
+      "physical_count": 12,
+      "runtime_path": "markers/skull.glb",
+      "source": "tronic3100_base_furniture",
+      "source_files": ["skull-tile.stl"],
+      "texture_source": "original_us_scan_pack"
+    },
+    {
+      "id": "enhancement.wall-1x1",
+      "category": "optional-enhancement",
+      "physical_count": 0,
+      "runtime_path": "walls/wall-1x1.glb",
+      "source": "enfenix_wall_tiles",
+      "source_files": ["WallTile_Solid_1x1.stl"],
+      "notes": "Optional visual wall replacing printed board boundaries; not an original physical component."
+    },
+    {
+      "id": "enhancement.wall-1x2",
+      "category": "optional-enhancement",
+      "physical_count": 0,
+      "runtime_path": "walls/wall-1x2.glb",
+      "source": "enfenix_wall_tiles",
+      "source_files": ["WallTile_Solid_1x2.stl"],
+      "notes": "Optional visual wall replacing printed board boundaries; not an original physical component."
+    }
+  ],
+  "flat_components": [
+    {"id": "board", "count": 1, "runtime": "already-loaded-local-scan"},
+    {"id": "playing-cards", "count": 66, "breakdown": {"treasure": 24, "artifact": 10, "monster": 8, "air-spell": 3, "fire-spell": 3, "earth-spell": 3, "water-spell": 3, "chaos-spell": 12}},
+    {"id": "character-cards", "count": 4},
+    {"id": "instruction-booklet", "count": 1},
+    {"id": "quest-book", "count": 1, "quests": 14},
+    {"id": "identification-guide-and-armory", "count": 1},
+    {"id": "character-sheet-pad", "count": 1}
+  ]
+}

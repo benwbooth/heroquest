@@ -1,0 +1,876 @@
+{
+  "title": "Race Against Time",
+  "blurb": "A treacherous guide has trapped the Heroes in a forgotten maze. Escape from the sealed starting room and make it back to the stairway alive.",
+  "source": {
+    "edition": "HeroQuest original US release",
+    "book": "Quest Book",
+    "page": 11
+  },
+  "corridors": [
+    {
+      "area": {
+        "x": 0,
+        "y": 0,
+        "width": 26,
+        "height": 19
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.25
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "name": "Northwest Guardroom",
+      "area": {
+        "x": 1,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.36,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Northwest Library",
+      "area": {
+        "x": 5,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.25,
+        0.31,
+        0.22
+      ]
+    },
+    {
+      "name": "Northwest Cellar",
+      "area": {
+        "x": 1,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.29,
+        0.30
+      ]
+    },
+    {
+      "name": "Northwest Hall",
+      "area": {
+        "x": 5,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.31,
+        0.22,
+        0.17
+      ]
+    },
+    {
+      "name": "Northern Gallery",
+      "area": {
+        "x": 9,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.30,
+        0.24
+      ]
+    },
+    {
+      "name": "Northern Shrine",
+      "area": {
+        "x": 14,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.42,
+        0.28,
+        0.16
+      ]
+    },
+    {
+      "name": "Northeast Forge",
+      "area": {
+        "x": 17,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.39,
+        0.19,
+        0.14
+      ]
+    },
+    {
+      "name": "Northeast Store",
+      "area": {
+        "x": 21,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.28,
+        0.31,
+        0.20
+      ]
+    },
+    {
+      "name": "Northeast Chapel",
+      "area": {
+        "x": 17,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.25,
+        0.34
+      ]
+    },
+    {
+      "name": "Northeast Vault",
+      "area": {
+        "x": 21,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.34,
+        0.24,
+        0.14
+      ]
+    },
+    {
+      "name": "Central Crypt",
+      "area": {
+        "x": 10,
+        "y": 7,
+        "width": 6,
+        "height": 5
+      },
+      "tint": [
+        0.29,
+        0.16,
+        0.22
+      ]
+    },
+    {
+      "name": "Southwest Barracks",
+      "area": {
+        "x": 1,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.33,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Southwest Armory",
+      "area": {
+        "x": 5,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.22
+      ]
+    },
+    {
+      "name": "Southwest Secret Room",
+      "area": {
+        "x": 7,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.28,
+        0.24,
+        0.18
+      ]
+    },
+    {
+      "name": "Southwest Tomb",
+      "area": {
+        "x": 1,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.23,
+        0.31
+      ]
+    },
+    {
+      "name": "Southwest Treasury",
+      "area": {
+        "x": 5,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.39,
+        0.29,
+        0.14
+      ]
+    },
+    {
+      "name": "Southern Workshop",
+      "area": {
+        "x": 9,
+        "y": 13,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.28,
+        0.23,
+        0.18
+      ]
+    },
+    {
+      "name": "Southern Prison",
+      "area": {
+        "x": 14,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.25,
+        0.28,
+        0.25
+      ]
+    },
+    {
+      "name": "Southeast Hall",
+      "area": {
+        "x": 18,
+        "y": 10,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.30,
+        0.19,
+        0.16
+      ],
+      "additional_areas": [
+        {
+          "x": 17,
+          "y": 10,
+          "width": 1,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "name": "Southeast Library",
+      "area": {
+        "x": 21,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.20
+      ]
+    },
+    {
+      "name": "Starting Chamber A",
+      "area": {
+        "x": 18,
+        "y": 14,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.32
+      ]
+    },
+    {
+      "name": "Southeast Throne Room",
+      "area": {
+        "x": 21,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.37,
+        0.21,
+        0.18
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "x": 5,
+      "y": 0
+    },
+    {
+      "x": 5,
+      "y": 9
+    },
+    {
+      "x": 12,
+      "y": 13
+    },
+    {
+      "x": 13,
+      "y": 13
+    },
+    {
+      "x": 21,
+      "y": 18
+    }
+  ],
+  "solid_rock": [
+    "......####################",
+    ".....#####################",
+    ".....#####################",
+    ".....#####################",
+    ".........#################",
+    ".........#################",
+    ".........#################",
+    ".........#################",
+    ".........#################",
+    "......####################",
+    ".........########....#####",
+    ".........########....#####",
+    ".........########....#####",
+    ".....................#####",
+    ".........................#",
+    ".........................#",
+    ".........................#",
+    ".........................#",
+    "......................####"
+  ],
+  "doors": [
+    {
+      "a": {
+        "x": 2,
+        "y": 0
+      },
+      "b": {
+        "x": 2,
+        "y": 1
+      }
+    },
+    {
+      "a": {
+        "x": 3,
+        "y": 3
+      },
+      "b": {
+        "x": 3,
+        "y": 4
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 5
+      },
+      "b": {
+        "x": 5,
+        "y": 5
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 8
+      },
+      "b": {
+        "x": 4,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 11
+      },
+      "b": {
+        "x": 5,
+        "y": 11
+      }
+    },
+    {
+      "a": {
+        "x": 2,
+        "y": 13
+      },
+      "b": {
+        "x": 2,
+        "y": 14
+      }
+    },
+    {
+      "a": {
+        "x": 19,
+        "y": 13
+      },
+      "b": {
+        "x": 19,
+        "y": 14
+      }
+    },
+    {
+      "a": {
+        "x": 11,
+        "y": 14
+      },
+      "b": {
+        "x": 12,
+        "y": 14
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 15
+      },
+      "b": {
+        "x": 5,
+        "y": 15
+      }
+    },
+    {
+      "a": {
+        "x": 8,
+        "y": 15
+      },
+      "b": {
+        "x": 9,
+        "y": 15
+      }
+    },
+    {
+      "a": {
+        "x": 17,
+        "y": 16
+      },
+      "b": {
+        "x": 18,
+        "y": 16
+      }
+    },
+    {
+      "a": {
+        "x": 20,
+        "y": 16
+      },
+      "b": {
+        "x": 21,
+        "y": 16
+      }
+    }
+  ],
+  "secret_doors": [
+    {
+      "a": {
+        "x": 6,
+        "y": 11
+      },
+      "b": {
+        "x": 7,
+        "y": 11
+      }
+    },
+    {
+      "a": {
+        "x": 19,
+        "y": 17
+      },
+      "b": {
+        "x": 19,
+        "y": 18
+      }
+    }
+  ],
+  "hero_starts": [
+    {
+      "hero": "barbarian",
+      "pos": {
+        "x": 18,
+        "y": 14
+      }
+    },
+    {
+      "hero": "dwarf",
+      "pos": {
+        "x": 20,
+        "y": 14
+      }
+    },
+    {
+      "hero": "elf",
+      "pos": {
+        "x": 18,
+        "y": 17
+      }
+    },
+    {
+      "hero": "wizard",
+      "pos": {
+        "x": 20,
+        "y": 17
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "x": 7,
+      "y": 4
+    },
+    {
+      "x": 8,
+      "y": 4
+    },
+    {
+      "x": 7,
+      "y": 5
+    },
+    {
+      "x": 8,
+      "y": 5
+    }
+  ],
+  "monsters": [
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 1,
+        "y": 0
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 2,
+        "y": 4
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 4,
+        "y": 4
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 3,
+        "y": 5
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 2,
+        "y": 6
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 4,
+        "y": 9
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 5,
+        "y": 10
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 5,
+        "y": 12
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 7,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 18,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 19,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 20,
+        "y": 12
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 7,
+        "y": 14
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 10,
+        "y": 14
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 13,
+        "y": 14
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 7,
+        "y": 15
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 9,
+        "y": 15
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 10,
+        "y": 15
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 17,
+        "y": 15
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 21,
+        "y": 15
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 16,
+        "y": 16
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 22,
+        "y": 16
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 17,
+        "y": 17
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 21,
+        "y": 17
+      }
+    }
+  ],
+  "allies": [],
+  "props": [
+    {
+      "prop": "stairs",
+      "pos": {
+        "x": 7,
+        "y": 4
+      },
+      "rotation_quarters": 2
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 6,
+        "y": 10
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 8,
+        "y": 11
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 6,
+        "y": 12
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "fireplace",
+      "pos": {
+        "x": 1,
+        "y": 15
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "table",
+      "pos": {
+        "x": 5,
+        "y": 16
+      },
+      "rotation_quarters": 0
+    }
+  ],
+  "quest_items": [],
+  "traps": [
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 8,
+        "y": 11
+      },
+      "trigger_on_entry": false
+    }
+  ],
+  "wandering_monster": "fimir",
+  "events": [
+    {
+      "id": "B1",
+      "marker": {
+        "x": 6,
+        "y": 11
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Southwest Armory"
+      },
+      "effect": {
+        "kind": "gold",
+        "amount": 100
+      },
+      "message": "The northern chest marked B contains 100 gold coins."
+    },
+    {
+      "id": "B2",
+      "marker": {
+        "x": 6,
+        "y": 11
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Southwest Armory"
+      },
+      "effect": {
+        "kind": "gold",
+        "amount": 100
+      },
+      "message": "The southern chest marked B contains another 100 gold coins."
+    },
+    {
+      "id": "C",
+      "marker": {
+        "x": 8,
+        "y": 10
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Southwest Secret Room"
+      },
+      "effect": {
+        "kind": "bundle",
+        "effects": [
+          {
+            "kind": "damage_unless_trap_disarmed",
+            "pos": {
+              "x": 8,
+              "y": 11
+            },
+            "amount": 3
+          },
+          {
+            "kind": "artifact",
+            "artifact": "elixir_of_life"
+          }
+        ]
+      },
+      "message": "Poisonous gas inflicts 3 Body Points unless the chest trap was disarmed. Inside is the Elixir of Life."
+    }
+  ],
+  "objective": {
+    "kind": "reach_stairs"
+  }
+}

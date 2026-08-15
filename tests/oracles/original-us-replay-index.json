@@ -1,0 +1,205 @@
+{
+  "format": 1,
+  "rule_suites": [
+    {
+      "section": "components_and_preparation",
+      "seed": "0x504859534943414c",
+      "fixtures": [
+        "every_official_quest_placement_respects_the_finite_box_figure_supply",
+        "real_model_slots_cover_every_figure_furniture_door_and_marker_type"
+      ]
+    },
+    {
+      "section": "game_setup",
+      "seed": "0x5345545550000001",
+      "fixtures": [
+        "all_four_heroes_are_assigned_even_for_one_player",
+        "selected_clockwise_order_changes_turns_not_hero_identity_or_start_square",
+        "setup_deals_the_elf_three_scanned_spells_and_the_wizard_the_other_nine"
+      ]
+    },
+    {
+      "section": "turn_sequence",
+      "seed": "0x5455524e00000001",
+      "fixtures": [
+        "four_hero_turns_are_followed_by_the_computer_game_master",
+        "an_action_before_movement_allows_the_entire_remaining_move"
+      ]
+    },
+    {
+      "section": "movement_doors_looking",
+      "seed": "0x4d4f564500000001",
+      "fixtures": [
+        "full_roll_exposes_every_reachable_destination_and_astar_shortest_path",
+        "line_of_sight_is_blocked_by_closed_doors_and_opened_permanently",
+        "opening_a_door_places_only_that_rooms_public_components"
+      ]
+    },
+    {
+      "section": "combat_death_equipment",
+      "seed": "0x434f4d4241540001",
+      "fixtures": [
+        "hero_and_monster_block_different_combat_faces",
+        "attack_options_enforce_each_original_weapon_shape_and_range",
+        "zero_body_interrupts_play_and_uses_the_heroes_physical_healing_die",
+        "armor_and_weapon_conflicts_change_defense_dice"
+      ]
+    },
+    {
+      "section": "hero_spells",
+      "seed": "0x5350454c4c000001",
+      "fixtures": [
+        "swift_wind_courage_rock_skin_and_healing_apply_then_expire_exactly",
+        "fire_spells_use_their_exact_physical_red_save_dice",
+        "genie_opens_a_chosen_door_or_attacks_any_placed_monster_with_five_dice"
+      ]
+    },
+    {
+      "section": "treasure_potions_artifacts",
+      "seed": "0x5452454153555245",
+      "fixtures": [
+        "treasure_search_adds_valuable_card_and_is_once_per_hero_per_room",
+        "treasure_hazard_deals_unblocked_damage_and_ends_the_turn",
+        "wandering_monster_is_placed_and_queues_its_visible_immediate_attack",
+        "active_hero_gives_an_exact_potion_card_and_gold_amount_to_another_hero",
+        "elixir_of_life_revives_one_dead_hero_at_full_body_and_is_consumed"
+      ]
+    },
+    {
+      "section": "secret_doors",
+      "seed": "0x5345435245540001",
+      "fixtures": [
+        "secret_door_search_reveals_but_does_not_open_the_door",
+        "event_only_secret_door_ignores_secret_search_until_treasure_reveals_it"
+      ]
+    },
+    {
+      "section": "traps",
+      "seed": "0x5452415053000001",
+      "fixtures": [
+        "tool_kit_disarms_on_a_shield_and_movement_may_continue",
+        "successful_jump_spends_two_moves_and_lands_beyond_the_trap",
+        "spear_trap_waits_for_one_visible_combat_die_before_resolving",
+        "falling_block_waits_for_three_visible_dice_and_permanently_blocks_its_square"
+      ]
+    },
+    {
+      "section": "zargon",
+      "seed": "0x5a4152474f4e0001",
+      "fixtures": [
+        "zargon_tactics_choose_shortest_routes_then_the_most_vulnerable_hero",
+        "command_uses_immediate_and_future_mind_rolls_then_makes_zargon_attack_with_the_hero",
+        "summon_undead_physical_die_creates_each_exact_card_group",
+        "balurs_summon_orcs_roll_places_four_to_six_real_orcs_around_him"
+      ]
+    },
+    {
+      "section": "quest_ending_campaign",
+      "seed": "0x43414d504149474e",
+      "fixtures": [
+        "voluntary_retreat_requires_every_survivor_on_stairs_and_awards_nothing",
+        "all_fourteen_campaign_chapters_match_engine_produced_begin_and_end_saves"
+      ]
+    }
+  ],
+  "quest_suites": [
+    {
+      "quest": 1,
+      "page": 3,
+      "seed": "0x5155455354000001",
+      "notes": ["A", "B", "C", "D", "E"],
+      "fixtures": ["the_trial_matches_every_printed_map_object", "the_trial_resolves_all_five_printed_notes"]
+    },
+    {
+      "quest": 2,
+      "page": 4,
+      "seed": "0x5155455354000002",
+      "notes": ["A", "B", "Finding Sir Ragnar"],
+      "fixtures": ["rescue_of_sir_ragnar_loads_its_ally_alarm_and_poisoned_chest", "sir_ragnar_quest_chests_and_rescue_reward_follow_the_printed_notes", "sir_ragnar_alarm_reveals_the_board_opens_doors_and_forbids_cell_treasure"]
+    },
+    {
+      "quest": 3,
+      "page": 5,
+      "seed": "0x5155455354000003",
+      "notes": ["A", "B", "Ulag"],
+      "fixtures": ["lair_of_the_orc_warlord_matches_every_printed_map_object", "ulag_quest_treasure_healing_and_bounty_follow_the_printed_notes"]
+    },
+    {
+      "quest": 4,
+      "page": 6,
+      "seed": "0x5155455354000004",
+      "notes": ["Royal Chests", "Gulthor", "return reward"],
+      "fixtures": ["prince_magnus_gold_matches_the_printed_components_and_royal_chests", "all_three_royal_chests_must_reach_the_stairs_for_the_240_gold_reward"]
+    },
+    {
+      "quest": 5,
+      "page": 7,
+      "seed": "0x5155455354000005",
+      "notes": ["A", "B", "C", "D", "E"],
+      "fixtures": ["melars_maze_matches_the_printed_components_and_notes", "melars_maze_resolves_all_five_printed_notes_and_the_artifact_exit"]
+    },
+    {
+      "quest": 6,
+      "page": 8,
+      "seed": "0x5155455354000006",
+      "notes": ["A", "Grak", "independent escape"],
+      "fixtures": ["legacy_of_the_orc_warlord_matches_the_printed_components_and_grak", "captured_heroes_fight_unequipped_and_reclaim_belongings_individually", "grak_casts_each_printed_spell_once_and_drops_the_wizards_cloak"]
+    },
+    {
+      "quest": 7,
+      "page": 9,
+      "seed": "0x5155455354000007",
+      "notes": ["A", "B", "C", "D"],
+      "fixtures": ["lost_wizard_matches_the_printed_map_and_wardoz_notes", "lost_wizard_borins_armor_adds_two_defend_dice_for_a_legal_wearer", "lost_wizard_purple_liquid_petrifies_for_five_invulnerable_turns", "lost_wizard_requires_wardozs_papers_and_rewards_each_returning_hero"]
+    },
+    {
+      "quest": 8,
+      "page": 10,
+      "seed": "0x5155455354000008",
+      "notes": ["A", "Balur", "X escape destination"],
+      "fixtures": ["fire_mage_matches_the_printed_map_balur_and_rewards", "fire_mage_wand_immunity_and_return_rewards_follow_the_quest_notes", "balurs_escape_hides_him_at_xx_until_the_middle_room_is_opened"]
+    },
+    {
+      "quest": 9,
+      "page": 11,
+      "seed": "0x5155455354000009",
+      "notes": ["A", "B", "C"],
+      "fixtures": ["race_against_time_matches_the_printed_map_and_three_chests", "race_against_time_starts_in_room_a_and_requires_the_remote_stairway", "race_against_time_resolves_both_gold_chests_in_room_b", "race_against_time_poison_gas_and_elixir_follow_note_c"]
+    },
+    {
+      "quest": 10,
+      "page": 12,
+      "seed": "0x515545535400000a",
+      "notes": ["A", "B", "magical doors 2-12"],
+      "fixtures": ["castle_of_mystery_matches_the_printed_map_and_numbered_squares", "castle_of_mystery_magical_door_stops_movement_and_uses_two_red_dice", "castle_of_mystery_ring_requires_both_guardians_and_returns_visible_heroes", "castle_of_mystery_mine_gold_blocks_combat_and_vanishes_at_quest_end"]
+    },
+    {
+      "quest": 11,
+      "page": 13,
+      "seed": "0x515545535400000b",
+      "notes": ["A", "B", "C", "monster bounties"],
+      "fixtures": ["bastion_of_chaos_matches_the_printed_map_and_bounties", "bastion_armory_search_awards_the_only_usable_shield", "bastion_chest_search_animates_the_stone_gargoyle_and_queues_its_attack", "bastion_bounties_and_orcs_bane_go_to_each_monsters_killer"]
+    },
+    {
+      "quest": 12,
+      "page": 14,
+      "seed": "0x515545535400000c",
+      "notes": ["A", "B", "C", "D", "E"],
+      "fixtures": ["barak_tor_matches_the_printed_map_star_and_witch_lord", "barak_tor_false_doors_can_never_be_opened", "barak_tor_block_falls_only_after_the_last_living_hero_passes", "barak_tor_star_starts_on_its_zombie_drops_and_returns_for_200_gold", "entering_the_tomb_releases_the_spirit_blade_immune_witch_lord", "barak_tor_hidden_bookcase_awards_the_wizards_staff_and_its_diagonal_attack"]
+    },
+    {
+      "quest": 13,
+      "page": 15,
+      "seed": "0x515545535400000d",
+      "notes": ["A", "B", "falling-rock squares"],
+      "fixtures": ["spirit_blade_quest_matches_every_printed_map_object_and_note", "spirit_blade_searches_award_the_artifact_and_chest_gold_then_allow_return", "spirit_blade_quest_ceiling_squares_stay_open_and_retrigger_with_physical_red_results"]
+    },
+    {
+      "quest": 14,
+      "page": 16,
+      "seed": "0x515545535400000e",
+      "notes": ["A", "Witch Lord", "Champion reward"],
+      "fixtures": ["return_to_barak_tor_matches_the_final_printed_map_and_witch_lord", "return_to_barak_tor_tomb_a_is_empty_and_wandering_monster_is_mummy", "final_witch_lord_requires_spirit_blade_drops_spell_ring_and_makes_survivors_champions"]
+    }
+  ]
+}

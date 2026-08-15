@@ -1,0 +1,944 @@
+{
+  "title": "The Trial",
+  "blurb": "Your first trial is to seek out and destroy Verag, a foul Gargoyle who hides in Fellmarg's catacombs.",
+  "source": {
+    "edition": "HeroQuest original US release",
+    "book": "Quest Book",
+    "page": 3
+  },
+  "corridors": [
+    {
+      "area": {
+        "x": 0,
+        "y": 0,
+        "width": 26,
+        "height": 19
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.25
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "name": "Northwest Guardroom",
+      "area": {
+        "x": 1,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.36,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Northwest Library",
+      "area": {
+        "x": 5,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.25,
+        0.31,
+        0.22
+      ]
+    },
+    {
+      "name": "Northwest Cellar",
+      "area": {
+        "x": 1,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.29,
+        0.30
+      ]
+    },
+    {
+      "name": "Northwest Hall",
+      "area": {
+        "x": 5,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.31,
+        0.22,
+        0.17
+      ]
+    },
+    {
+      "name": "Northern Gallery",
+      "area": {
+        "x": 9,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.30,
+        0.24
+      ]
+    },
+    {
+      "name": "Northern Shrine",
+      "area": {
+        "x": 14,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.42,
+        0.28,
+        0.16
+      ]
+    },
+    {
+      "name": "Northeast Forge",
+      "area": {
+        "x": 17,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.39,
+        0.19,
+        0.14
+      ]
+    },
+    {
+      "name": "Northeast Store",
+      "area": {
+        "x": 21,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.28,
+        0.31,
+        0.20
+      ]
+    },
+    {
+      "name": "Northeast Chapel",
+      "area": {
+        "x": 17,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.25,
+        0.34
+      ]
+    },
+    {
+      "name": "Northeast Vault",
+      "area": {
+        "x": 21,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.34,
+        0.24,
+        0.14
+      ]
+    },
+    {
+      "name": "Central Crypt",
+      "area": {
+        "x": 10,
+        "y": 7,
+        "width": 6,
+        "height": 5
+      },
+      "tint": [
+        0.29,
+        0.16,
+        0.22
+      ]
+    },
+    {
+      "name": "Southwest Barracks",
+      "area": {
+        "x": 1,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.33,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Southwest Armory",
+      "area": {
+        "x": 5,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.22
+      ]
+    },
+    {
+      "name": "Southwest Secret Room",
+      "area": {
+        "x": 7,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.28,
+        0.24,
+        0.18
+      ]
+    },
+    {
+      "name": "Southwest Tomb",
+      "area": {
+        "x": 1,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.23,
+        0.31
+      ]
+    },
+    {
+      "name": "Southwest Treasury",
+      "area": {
+        "x": 5,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.39,
+        0.29,
+        0.14
+      ]
+    },
+    {
+      "name": "Southern Workshop",
+      "area": {
+        "x": 9,
+        "y": 13,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.28,
+        0.23,
+        0.18
+      ]
+    },
+    {
+      "name": "Southern Prison",
+      "area": {
+        "x": 14,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.25,
+        0.28,
+        0.25
+      ]
+    },
+    {
+      "name": "Southeast Hall",
+      "area": {
+        "x": 18,
+        "y": 10,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.30,
+        0.19,
+        0.16
+      ],
+      "additional_areas": [
+        {
+          "x": 17,
+          "y": 10,
+          "width": 1,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "name": "Southeast Library",
+      "area": {
+        "x": 21,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.20
+      ]
+    },
+    {
+      "name": "Southeast Tomb",
+      "area": {
+        "x": 18,
+        "y": 14,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.32
+      ]
+    },
+    {
+      "name": "Southeast Throne Room",
+      "area": {
+        "x": 21,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.37,
+        0.21,
+        0.18
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "x": 0,
+      "y": 1
+    },
+    {
+      "x": 12,
+      "y": 5
+    },
+    {
+      "x": 13,
+      "y": 5
+    },
+    {
+      "x": 17,
+      "y": 9
+    },
+    {
+      "x": 14,
+      "y": 18
+    }
+  ],
+  "solid_rock": [
+    "##########################",
+    "............##############",
+    "............##############",
+    "............##############",
+    "............##############",
+    "..............############",
+    ".................#########",
+    ".................#########",
+    ".................#########",
+    "..................########",
+    ".....####........#########",
+    ".....####........#########",
+    ".....####........#########",
+    "..................########",
+    "..................########",
+    "..................########",
+    "..................########",
+    "..................########",
+    "...............###########"
+  ],
+  "doors": [
+    {
+      "a": {
+        "x": 4,
+        "y": 2
+      },
+      "b": {
+        "x": 5,
+        "y": 2
+      }
+    },
+    {
+      "a": {
+        "x": 8,
+        "y": 2
+      },
+      "b": {
+        "x": 9,
+        "y": 2
+      }
+    },
+    {
+      "a": {
+        "x": 3,
+        "y": 3
+      },
+      "b": {
+        "x": 3,
+        "y": 4
+      }
+    },
+    {
+      "a": {
+        "x": 3,
+        "y": 8
+      },
+      "b": {
+        "x": 3,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 7,
+        "y": 8
+      },
+      "b": {
+        "x": 7,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 15,
+        "y": 9
+      },
+      "b": {
+        "x": 16,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 0,
+        "y": 11
+      },
+      "b": {
+        "x": 1,
+        "y": 11
+      }
+    },
+    {
+      "a": {
+        "x": 10,
+        "y": 12
+      },
+      "b": {
+        "x": 10,
+        "y": 13
+      }
+    },
+    {
+      "a": {
+        "x": 8,
+        "y": 15
+      },
+      "b": {
+        "x": 9,
+        "y": 15
+      }
+    },
+    {
+      "a": {
+        "x": 13,
+        "y": 15
+      },
+      "b": {
+        "x": 14,
+        "y": 15
+      }
+    },
+    {
+      "a": {
+        "x": 3,
+        "y": 17
+      },
+      "b": {
+        "x": 3,
+        "y": 18
+      }
+    },
+    {
+      "a": {
+        "x": 7,
+        "y": 17
+      },
+      "b": {
+        "x": 7,
+        "y": 18
+      }
+    }
+  ],
+  "secret_doors": [],
+  "hero_starts": [
+    {
+      "hero": "barbarian",
+      "pos": {
+        "x": 1,
+        "y": 14
+      }
+    },
+    {
+      "hero": "dwarf",
+      "pos": {
+        "x": 2,
+        "y": 14
+      }
+    },
+    {
+      "hero": "elf",
+      "pos": {
+        "x": 1,
+        "y": 15
+      }
+    },
+    {
+      "hero": "wizard",
+      "pos": {
+        "x": 2,
+        "y": 15
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "x": 1,
+      "y": 14
+    },
+    {
+      "x": 2,
+      "y": 14
+    },
+    {
+      "x": 1,
+      "y": 15
+    },
+    {
+      "x": 2,
+      "y": 15
+    }
+  ],
+  "monsters": [
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 6,
+        "y": 1
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 9,
+        "y": 1
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 2,
+        "y": 2
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 3,
+        "y": 2
+      }
+    },
+    {
+      "monster": "mummy",
+      "name": "Guardian of Fellmarg's Tomb",
+      "pos": {
+        "x": 6,
+        "y": 2
+      },
+      "attack": 4
+    },
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 6,
+        "y": 3
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 9,
+        "y": 3
+      }
+    },
+    {
+      "monster": "mummy",
+      "pos": {
+        "x": 9,
+        "y": 4
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 4,
+        "y": 5
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 3,
+        "y": 6
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 6,
+        "y": 7
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 7,
+        "y": 7
+      }
+    },
+    {
+      "monster": "gargoyle",
+      "name": "Verag",
+      "pos": {
+        "x": 12,
+        "y": 8
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 14,
+        "y": 8
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 2,
+        "y": 11
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 11,
+        "y": 11
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 14,
+        "y": 11
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 2,
+        "y": 12
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 7,
+        "y": 14
+      }
+    },
+    {
+      "monster": "goblin",
+      "pos": {
+        "x": 10,
+        "y": 14
+      }
+    },
+    {
+      "monster": "orc",
+      "pos": {
+        "x": 8,
+        "y": 15
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 16,
+        "y": 15
+      }
+    },
+    {
+      "monster": "fimir",
+      "pos": {
+        "x": 10,
+        "y": 16
+      }
+    },
+    {
+      "monster": "chaos_warrior",
+      "pos": {
+        "x": 15,
+        "y": 16
+      }
+    }
+  ],
+  "props": [
+    {
+      "prop": "tomb",
+      "pos": {
+        "x": 10,
+        "y": 1
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "sorcerers_table",
+      "pos": {
+        "x": 1,
+        "y": 5
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "table",
+      "pos": {
+        "x": 6,
+        "y": 5
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 10,
+        "y": 5
+      },
+      "rotation_quarters": 2
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 11,
+        "y": 7
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "fireplace",
+      "pos": {
+        "x": 12,
+        "y": 7
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "throne",
+      "pos": {
+        "x": 10,
+        "y": 8
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "table",
+      "pos": {
+        "x": 11,
+        "y": 9
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "torture_rack",
+      "pos": {
+        "x": 3,
+        "y": 10
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "bookcase",
+      "pos": {
+        "x": 5,
+        "y": 13
+      },
+      "rotation_quarters": 2
+    },
+    {
+      "prop": "cupboard",
+      "pos": {
+        "x": 15,
+        "y": 13
+      },
+      "rotation_quarters": 2
+    },
+    {
+      "prop": "stairs",
+      "pos": {
+        "x": 1,
+        "y": 14
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "alchemists_bench",
+      "pos": {
+        "x": 5,
+        "y": 15
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "weapon_rack",
+      "pos": {
+        "x": 11,
+        "y": 15
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "chest",
+      "pos": {
+        "x": 17,
+        "y": 16
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "bookcase",
+      "pos": {
+        "x": 15,
+        "y": 17
+      },
+      "rotation_quarters": 0
+    }
+  ],
+  "traps": [],
+  "wandering_monster": "orc",
+  "events": [
+    {
+      "id": "A",
+      "marker": {
+        "x": 11,
+        "y": 14
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Southern Workshop"
+      },
+      "effect": {
+        "kind": "empty"
+      },
+      "message": "The weapon rack holds only chipped, rusted, and broken weapons. Nothing here is useful."
+    },
+    {
+      "id": "B",
+      "marker": {
+        "x": 17,
+        "y": 15
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Southern Prison"
+      },
+      "effect": {
+        "kind": "empty"
+      },
+      "message": "The treasure chest is empty."
+    },
+    {
+      "id": "C",
+      "marker": {
+        "x": 7,
+        "y": 2
+      },
+      "trigger": {
+        "kind": "reveal_room",
+        "room": "Northwest Library"
+      },
+      "effect": {
+        "kind": "message"
+      },
+      "message": "The Guardian of Fellmarg's Tomb is a mighty Mummy and attacks with 4 combat dice."
+    },
+    {
+      "id": "D",
+      "marker": {
+        "x": 11,
+        "y": 5
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Northern Gallery"
+      },
+      "effect": {
+        "kind": "gold",
+        "amount": 84
+      },
+      "message": "The first Hero to search this chamber finds 84 gold coins in the treasure chest."
+    },
+    {
+      "id": "E",
+      "marker": {
+        "x": 10,
+        "y": 7
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Central Crypt"
+      },
+      "effect": {
+        "kind": "gold",
+        "amount": 120
+      },
+      "message": "The first Hero to search this chamber finds 120 gold coins in the treasure chest."
+    }
+  ],
+  "objective": {
+    "kind": "defeat_named_and_return",
+    "name": "Verag"
+  }
+}

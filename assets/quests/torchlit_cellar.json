@@ -1,0 +1,94 @@
+{
+  "title": "The Torchlit Cellar",
+  "blurb": "An original proving-ground quest: defeat the Crypt Warden and return every surviving hero to the stairway.",
+  "corridors": [
+    { "area": { "x": 0, "y": 0, "width": 26, "height": 1 }, "tint": [0.22, 0.24, 0.25] },
+    { "area": { "x": 0, "y": 18, "width": 26, "height": 1 }, "tint": [0.22, 0.24, 0.25] },
+    { "area": { "x": 0, "y": 0, "width": 1, "height": 19 }, "tint": [0.22, 0.24, 0.25] },
+    { "area": { "x": 25, "y": 0, "width": 1, "height": 19 }, "tint": [0.22, 0.24, 0.25] },
+    { "area": { "x": 9, "y": 0, "width": 1, "height": 19 }, "tint": [0.24, 0.26, 0.27] },
+    { "area": { "x": 16, "y": 0, "width": 1, "height": 19 }, "tint": [0.24, 0.26, 0.27] },
+    { "area": { "x": 0, "y": 9, "width": 10, "height": 1 }, "tint": [0.24, 0.26, 0.27] },
+    { "area": { "x": 16, "y": 9, "width": 10, "height": 1 }, "tint": [0.24, 0.26, 0.27] },
+    { "area": { "x": 9, "y": 7, "width": 8, "height": 1 }, "tint": [0.25, 0.27, 0.28] },
+    { "area": { "x": 9, "y": 12, "width": 8, "height": 1 }, "tint": [0.25, 0.27, 0.28] }
+  ],
+  "rooms": [
+    { "name": "Northwest Guardroom", "area": { "x": 1, "y": 1, "width": 4, "height": 4 }, "tint": [0.36, 0.20, 0.16] },
+    { "name": "Northwest Library", "area": { "x": 5, "y": 1, "width": 4, "height": 3 }, "tint": [0.25, 0.31, 0.22] },
+    { "name": "Northwest Hall", "area": { "x": 5, "y": 4, "width": 4, "height": 5 }, "tint": [0.31, 0.22, 0.17] },
+    { "name": "Northwest Cellar", "area": { "x": 1, "y": 5, "width": 4, "height": 4 }, "tint": [0.22, 0.29, 0.30] },
+
+    { "name": "Northern Alchemy Room", "area": { "x": 10, "y": 1, "width": 3, "height": 3 }, "tint": [0.22, 0.30, 0.24] },
+    { "name": "Stair Chamber", "area": { "x": 13, "y": 1, "width": 3, "height": 3 }, "tint": [0.42, 0.28, 0.16] },
+    { "name": "Northern Gallery", "area": { "x": 10, "y": 4, "width": 6, "height": 3 }, "tint": [0.30, 0.23, 0.19] },
+
+    { "name": "Northeast Forge", "area": { "x": 17, "y": 1, "width": 4, "height": 4 }, "tint": [0.39, 0.19, 0.14] },
+    { "name": "Northeast Store", "area": { "x": 21, "y": 1, "width": 4, "height": 4 }, "tint": [0.28, 0.31, 0.20] },
+    { "name": "Northeast Chapel", "area": { "x": 17, "y": 5, "width": 4, "height": 4 }, "tint": [0.24, 0.25, 0.34] },
+    { "name": "Northeast Vault", "area": { "x": 21, "y": 5, "width": 4, "height": 4 }, "tint": [0.34, 0.24, 0.14] },
+
+    { "name": "Central Crypt", "area": { "x": 10, "y": 8, "width": 6, "height": 4 }, "tint": [0.29, 0.16, 0.22] },
+
+    { "name": "Southwest Barracks", "area": { "x": 1, "y": 10, "width": 4, "height": 4 }, "tint": [0.33, 0.20, 0.16] },
+    { "name": "Southwest Armory", "area": { "x": 5, "y": 10, "width": 4, "height": 4 }, "tint": [0.24, 0.30, 0.22] },
+    { "name": "Southwest Tomb", "area": { "x": 1, "y": 14, "width": 4, "height": 4 }, "tint": [0.24, 0.23, 0.31] },
+    { "name": "Southwest Treasury", "area": { "x": 5, "y": 14, "width": 4, "height": 4 }, "tint": [0.39, 0.29, 0.14] },
+
+    { "name": "Southern Workshop", "area": { "x": 10, "y": 13, "width": 3, "height": 5 }, "tint": [0.28, 0.23, 0.18] },
+    { "name": "Southern Shrine", "area": { "x": 13, "y": 13, "width": 3, "height": 2 }, "tint": [0.21, 0.27, 0.34] },
+    { "name": "Southern Prison", "area": { "x": 13, "y": 15, "width": 3, "height": 3 }, "tint": [0.25, 0.28, 0.25] },
+
+    { "name": "Southeast Hall", "area": { "x": 17, "y": 10, "width": 4, "height": 4 }, "tint": [0.30, 0.19, 0.16] },
+    { "name": "Southeast Library", "area": { "x": 21, "y": 10, "width": 4, "height": 4 }, "tint": [0.24, 0.30, 0.20] },
+    { "name": "Southeast Tomb", "area": { "x": 17, "y": 14, "width": 4, "height": 4 }, "tint": [0.22, 0.24, 0.32] },
+    { "name": "Southeast Throne Room", "area": { "x": 21, "y": 14, "width": 4, "height": 4 }, "tint": [0.37, 0.21, 0.18] }
+  ],
+  "blocked": [],
+  "doors": [
+    { "a": { "x": 15, "y": 2 }, "b": { "x": 16, "y": 2 } },
+    { "a": { "x": 16, "y": 3 }, "b": { "x": 17, "y": 3 } },
+    { "a": { "x": 20, "y": 2 }, "b": { "x": 21, "y": 2 } },
+    { "a": { "x": 18, "y": 4 }, "b": { "x": 18, "y": 5 } },
+    { "a": { "x": 20, "y": 6 }, "b": { "x": 21, "y": 6 } },
+    { "a": { "x": 22, "y": 8 }, "b": { "x": 22, "y": 9 } },
+    { "a": { "x": 16, "y": 9 }, "b": { "x": 15, "y": 9 } },
+    { "a": { "x": 13, "y": 7 }, "b": { "x": 13, "y": 8 } },
+    { "a": { "x": 13, "y": 11 }, "b": { "x": 13, "y": 12 } },
+    { "a": { "x": 11, "y": 12 }, "b": { "x": 11, "y": 13 } },
+    { "a": { "x": 16, "y": 12 }, "b": { "x": 17, "y": 12 } },
+    { "a": { "x": 20, "y": 11 }, "b": { "x": 21, "y": 11 } },
+    { "a": { "x": 18, "y": 13 }, "b": { "x": 18, "y": 14 } },
+    { "a": { "x": 22, "y": 13 }, "b": { "x": 22, "y": 14 } }
+  ],
+  "hero_starts": [
+    { "hero": "barbarian", "pos": { "x": 14, "y": 2 } },
+    { "hero": "dwarf", "pos": { "x": 13, "y": 1 } },
+    { "hero": "elf", "pos": { "x": 14, "y": 1 } },
+    { "hero": "wizard", "pos": { "x": 13, "y": 2 } }
+  ],
+  "stairs": [
+    { "x": 13, "y": 1 }, { "x": 14, "y": 1 },
+    { "x": 13, "y": 2 }, { "x": 14, "y": 2 }
+  ],
+  "monsters": [
+    { "monster": "goblin", "pos": { "x": 16, "y": 2 } },
+    { "monster": "orc", "pos": { "x": 18, "y": 3 } },
+    { "monster": "orc", "pos": { "x": 22, "y": 2 } },
+    { "monster": "goblin", "pos": { "x": 18, "y": 6 } },
+    { "monster": "skeleton", "pos": { "x": 11, "y": 9 } },
+    { "monster": "chaos_warrior", "name": "Crypt Warden", "pos": { "x": 13, "y": 10 }, "body": 3 },
+    { "monster": "zombie", "pos": { "x": 10, "y": 10 } }
+  ],
+  "props": [
+    { "prop": "stairs", "pos": { "x": 13, "y": 1 }, "rotation_quarters": 1 },
+    { "prop": "table", "pos": { "x": 19, "y": 2 } },
+    { "prop": "weapon_rack", "pos": { "x": 22, "y": 3 }, "rotation_quarters": 1 },
+    { "prop": "bookcase", "pos": { "x": 18, "y": 7 } },
+    { "prop": "chest", "pos": { "x": 23, "y": 7 } },
+    { "prop": "throne", "pos": { "x": 12, "y": 9 }, "rotation_quarters": 2 },
+    { "prop": "table", "pos": { "x": 14, "y": 9 }, "rotation_quarters": 1 }
+  ],
+  "wandering_monster": "orc",
+  "objective": { "kind": "defeat_named_and_return", "name": "Crypt Warden" }
+}

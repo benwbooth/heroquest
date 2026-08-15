@@ -1,0 +1,9 @@
+/target/
+/result
+/tmp/
+/assets/local/*
+!/assets/local/.gitkeep
+*.log
+__pycache__/
+*.py[cod]
+.pytest_cache/

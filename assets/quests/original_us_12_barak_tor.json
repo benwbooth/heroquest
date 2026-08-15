@@ -1,0 +1,930 @@
+{
+  "title": "Barak Tor - Barrow of the Witch Lord",
+  "blurb": "Recover the Star of the West from Barak Tor and return it to the Emperor. The ancient Witch Lord lies imprisoned within, immune to everything except the lost Spirit Blade.",
+  "source": {
+    "edition": "HeroQuest original US release",
+    "book": "Quest Book",
+    "page": 14
+  },
+  "corridors": [
+    {
+      "area": {
+        "x": 0,
+        "y": 0,
+        "width": 26,
+        "height": 19
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.25
+      ]
+    }
+  ],
+  "rooms": [
+    {
+      "name": "Northwest Guardroom",
+      "area": {
+        "x": 1,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.36,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Northwest Library",
+      "area": {
+        "x": 5,
+        "y": 1,
+        "width": 4,
+        "height": 3
+      },
+      "tint": [
+        0.25,
+        0.31,
+        0.22
+      ]
+    },
+    {
+      "name": "Northwest Cellar",
+      "area": {
+        "x": 1,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.29,
+        0.30
+      ]
+    },
+    {
+      "name": "Northwest Hall",
+      "area": {
+        "x": 5,
+        "y": 4,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.31,
+        0.22,
+        0.17
+      ]
+    },
+    {
+      "name": "Northern Gallery",
+      "area": {
+        "x": 9,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.22,
+        0.30,
+        0.24
+      ]
+    },
+    {
+      "name": "Northern Shrine",
+      "area": {
+        "x": 14,
+        "y": 1,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.42,
+        0.28,
+        0.16
+      ]
+    },
+    {
+      "name": "Northeast Forge",
+      "area": {
+        "x": 17,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.39,
+        0.19,
+        0.14
+      ]
+    },
+    {
+      "name": "Northeast Store",
+      "area": {
+        "x": 21,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.28,
+        0.31,
+        0.20
+      ]
+    },
+    {
+      "name": "Northeast Chapel",
+      "area": {
+        "x": 17,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.25,
+        0.34
+      ]
+    },
+    {
+      "name": "Northeast Vault",
+      "area": {
+        "x": 21,
+        "y": 5,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.34,
+        0.24,
+        0.14
+      ]
+    },
+    {
+      "name": "Central Crypt",
+      "area": {
+        "x": 10,
+        "y": 7,
+        "width": 6,
+        "height": 5
+      },
+      "tint": [
+        0.29,
+        0.16,
+        0.22
+      ]
+    },
+    {
+      "name": "Witch Lord Tomb D",
+      "area": {
+        "x": 1,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.33,
+        0.20,
+        0.16
+      ]
+    },
+    {
+      "name": "Southwest Armory",
+      "area": {
+        "x": 5,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.22
+      ]
+    },
+    {
+      "name": "Southwest Secret Room",
+      "area": {
+        "x": 7,
+        "y": 10,
+        "width": 2,
+        "height": 3
+      },
+      "tint": [
+        0.28,
+        0.24,
+        0.18
+      ]
+    },
+    {
+      "name": "Stair Chamber",
+      "area": {
+        "x": 1,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.23,
+        0.31
+      ]
+    },
+    {
+      "name": "Hidden Library E",
+      "area": {
+        "x": 5,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.39,
+        0.29,
+        0.14
+      ]
+    },
+    {
+      "name": "Southern Workshop",
+      "area": {
+        "x": 9,
+        "y": 13,
+        "width": 3,
+        "height": 5
+      },
+      "tint": [
+        0.28,
+        0.23,
+        0.18
+      ]
+    },
+    {
+      "name": "Southern Prison",
+      "area": {
+        "x": 14,
+        "y": 13,
+        "width": 4,
+        "height": 5
+      },
+      "tint": [
+        0.25,
+        0.28,
+        0.25
+      ]
+    },
+    {
+      "name": "Southeast Hall",
+      "area": {
+        "x": 18,
+        "y": 10,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.30,
+        0.19,
+        0.16
+      ],
+      "additional_areas": [
+        {
+          "x": 17,
+          "y": 10,
+          "width": 1,
+          "height": 3
+        }
+      ]
+    },
+    {
+      "name": "Southeast Library",
+      "area": {
+        "x": 21,
+        "y": 10,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.24,
+        0.30,
+        0.20
+      ]
+    },
+    {
+      "name": "Southeast Tomb",
+      "area": {
+        "x": 18,
+        "y": 14,
+        "width": 3,
+        "height": 4
+      },
+      "tint": [
+        0.22,
+        0.24,
+        0.32
+      ]
+    },
+    {
+      "name": "Southeast Throne Room",
+      "area": {
+        "x": 21,
+        "y": 14,
+        "width": 4,
+        "height": 4
+      },
+      "tint": [
+        0.37,
+        0.21,
+        0.18
+      ]
+    }
+  ],
+  "blocked": [
+    {
+      "x": 9,
+      "y": 0
+    },
+    {
+      "x": 12,
+      "y": 3
+    },
+    {
+      "x": 13,
+      "y": 3
+    },
+    {
+      "x": 10,
+      "y": 6
+    },
+    {
+      "x": 14,
+      "y": 6
+    },
+    {
+      "x": 25,
+      "y": 8
+    },
+    {
+      "x": 1,
+      "y": 9
+    },
+    {
+      "x": 16,
+      "y": 10
+    },
+    {
+      "x": 12,
+      "y": 13
+    },
+    {
+      "x": 13,
+      "y": 13
+    },
+    {
+      "x": 0,
+      "y": 18
+    },
+    {
+      "x": 9,
+      "y": 18
+    }
+  ],
+  "solid_rock": [
+    "..........................",
+    "..............###########.",
+    "..............###########.",
+    "..............###########.",
+    ".########.....###########.",
+    ".########.....###########.",
+    ".########........########.",
+    ".########........########.",
+    ".########........########.",
+    "..........................",
+    ".................########.",
+    ".................########.",
+    ".................########.",
+    "..............###########.",
+    "..............###########.",
+    "..............###########.",
+    "..............###########.",
+    "..............###########.",
+    ".########................."
+  ],
+  "doors": [
+    {
+      "a": {
+        "x": 3,
+        "y": 0
+      },
+      "b": {
+        "x": 3,
+        "y": 1
+      }
+    },
+    {
+      "a": {
+        "x": 7,
+        "y": 0
+      },
+      "b": {
+        "x": 7,
+        "y": 1
+      }
+    },
+    {
+      "a": {
+        "x": 18,
+        "y": 0
+      },
+      "b": {
+        "x": 18,
+        "y": 1
+      },
+      "false_door": true
+    },
+    {
+      "a": {
+        "x": 22,
+        "y": 0
+      },
+      "b": {
+        "x": 22,
+        "y": 1
+      },
+      "false_door": true
+    },
+    {
+      "a": {
+        "x": 11,
+        "y": 2
+      },
+      "b": {
+        "x": 12,
+        "y": 2
+      }
+    },
+    {
+      "a": {
+        "x": 8,
+        "y": 3
+      },
+      "b": {
+        "x": 9,
+        "y": 3
+      }
+    },
+    {
+      "a": {
+        "x": 12,
+        "y": 6
+      },
+      "b": {
+        "x": 12,
+        "y": 7
+      }
+    },
+    {
+      "a": {
+        "x": 24,
+        "y": 7
+      },
+      "b": {
+        "x": 25,
+        "y": 7
+      },
+      "false_door": true
+    },
+    {
+      "a": {
+        "x": 6,
+        "y": 9
+      },
+      "b": {
+        "x": 6,
+        "y": 10
+      }
+    },
+    {
+      "a": {
+        "x": 9,
+        "y": 9
+      },
+      "b": {
+        "x": 10,
+        "y": 9
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 11
+      },
+      "b": {
+        "x": 5,
+        "y": 11
+      }
+    },
+    {
+      "a": {
+        "x": 6,
+        "y": 12
+      },
+      "b": {
+        "x": 7,
+        "y": 12
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 13
+      },
+      "b": {
+        "x": 5,
+        "y": 13
+      }
+    },
+    {
+      "a": {
+        "x": 0,
+        "y": 17
+      },
+      "b": {
+        "x": 1,
+        "y": 17
+      }
+    },
+    {
+      "a": {
+        "x": 10,
+        "y": 17
+      },
+      "b": {
+        "x": 10,
+        "y": 18
+      }
+    }
+  ],
+  "secret_doors": [
+    {
+      "a": {
+        "x": 11,
+        "y": 4
+      },
+      "b": {
+        "x": 12,
+        "y": 4
+      }
+    },
+    {
+      "a": {
+        "x": 15,
+        "y": 6
+      },
+      "b": {
+        "x": 15,
+        "y": 7
+      }
+    },
+    {
+      "a": {
+        "x": 4,
+        "y": 16
+      },
+      "b": {
+        "x": 5,
+        "y": 16
+      }
+    },
+    {
+      "a": {
+        "x": 8,
+        "y": 16
+      },
+      "b": {
+        "x": 9,
+        "y": 16
+      }
+    }
+  ],
+  "hero_starts": [
+    {
+      "hero": "barbarian",
+      "pos": {
+        "x": 1,
+        "y": 14
+      }
+    },
+    {
+      "hero": "dwarf",
+      "pos": {
+        "x": 2,
+        "y": 14
+      }
+    },
+    {
+      "hero": "elf",
+      "pos": {
+        "x": 1,
+        "y": 15
+      }
+    },
+    {
+      "hero": "wizard",
+      "pos": {
+        "x": 2,
+        "y": 15
+      }
+    }
+  ],
+  "stairs": [
+    {
+      "x": 1,
+      "y": 14
+    },
+    {
+      "x": 2,
+      "y": 14
+    },
+    {
+      "x": 1,
+      "y": 15
+    },
+    {
+      "x": 2,
+      "y": 15
+    }
+  ],
+  "monsters": [
+    {
+      "monster": "mummy",
+      "pos": {
+        "x": 3,
+        "y": 2
+      }
+    },
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 5,
+        "y": 2
+      }
+    },
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 7,
+        "y": 2
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 8,
+        "y": 2
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 7,
+        "y": 3
+      }
+    },
+    {
+      "monster": "zombie",
+      "name": "Star Bearer",
+      "pos": {
+        "x": 11,
+        "y": 9
+      }
+    },
+    {
+      "monster": "chaos_sorcerer",
+      "name": "Witch Lord",
+      "pos": {
+        "x": 1,
+        "y": 10
+      },
+      "movement": 1,
+      "attack": 2,
+      "body": 1,
+      "dormant": true,
+      "hidden_until_activated": true,
+      "immune_except_spirit_blade": true,
+      "chaos_spells": [
+        "summon_undead",
+        "fear",
+        "command",
+        "ball_of_flame"
+      ]
+    },
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 3,
+        "y": 10
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 8,
+        "y": 10
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 8,
+        "y": 11
+      }
+    },
+    {
+      "monster": "skeleton",
+      "pos": {
+        "x": 5,
+        "y": 12
+      }
+    },
+    {
+      "monster": "zombie",
+      "pos": {
+        "x": 3,
+        "y": 13
+      }
+    },
+    {
+      "monster": "mummy",
+      "pos": {
+        "x": 7,
+        "y": 15
+      }
+    },
+    {
+      "monster": "gargoyle",
+      "pos": {
+        "x": 12,
+        "y": 15
+      }
+    }
+  ],
+  "allies": [],
+  "props": [
+    {
+      "prop": "table",
+      "pos": {
+        "x": 12,
+        "y": 8
+      },
+      "rotation_quarters": 3
+    },
+    {
+      "prop": "star_of_west",
+      "pos": {
+        "x": 11,
+        "y": 9
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "tomb",
+      "pos": {
+        "x": 1,
+        "y": 11
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "bookcase",
+      "pos": {
+        "x": 6,
+        "y": 13
+      },
+      "rotation_quarters": 0
+    },
+    {
+      "prop": "stairs",
+      "pos": {
+        "x": 1,
+        "y": 14
+      },
+      "rotation_quarters": 1
+    },
+    {
+      "prop": "bookcase",
+      "pos": {
+        "x": 6,
+        "y": 17
+      },
+      "rotation_quarters": 2
+    }
+  ],
+  "quest_items": [
+    {
+      "id": "Star of the West",
+      "prop": "star_of_west",
+      "pos": {
+        "x": 11,
+        "y": 9
+      },
+      "held_by": "Star Bearer"
+    }
+  ],
+  "traps": [
+    {
+      "trap": "falling_block",
+      "pos": {
+        "x": 0,
+        "y": 0
+      },
+      "trigger_on_entry": false,
+      "disarmable": false
+    },
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 15,
+        "y": 0
+      }
+    },
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 17,
+        "y": 0
+      }
+    },
+    {
+      "trap": "spear",
+      "pos": {
+        "x": 20,
+        "y": 0
+      }
+    },
+    {
+      "trap": "pit",
+      "pos": {
+        "x": 25,
+        "y": 6
+      }
+    },
+    {
+      "trap": "pit",
+      "pos": {
+        "x": 16,
+        "y": 12
+      }
+    }
+  ],
+  "wandering_monster": "skeleton",
+  "events": [
+    {
+      "id": "D",
+      "marker": {
+        "x": 1,
+        "y": 13
+      },
+      "trigger": {
+        "kind": "reveal_room",
+        "room": "Witch Lord Tomb D"
+      },
+      "effect": {
+        "kind": "activate_named",
+        "name": "Witch Lord"
+      },
+      "message": "The magic seal is broken. The Witch Lord awakens; only the Spirit Blade can harm him. Run!"
+    },
+    {
+      "id": "E",
+      "marker": {
+        "x": 5,
+        "y": 17
+      },
+      "trigger": {
+        "kind": "search_treasure",
+        "room": "Hidden Library E"
+      },
+      "effect": {
+        "kind": "artifact",
+        "artifact": "wizards_staff"
+      },
+      "message": "Behind the bookcase lies the magical Wizard's Staff."
+    }
+  ],
+  "delayed_falling_block": {
+    "pos": {
+      "x": 0,
+      "y": 0
+    },
+    "exit": {
+      "x": 1,
+      "y": 0
+    }
+  },
+  "objective": {
+    "kind": "return_quest_items",
+    "count": 1,
+    "reward_gold": 200
+  }
+}
