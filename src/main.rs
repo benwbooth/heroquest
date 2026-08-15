@@ -3962,6 +3962,10 @@ fn append_allowed_actions(game: &Game, actions: &mut Vec<String>) {
             actions.push("[E] FORGO SECOND ATTACK / END TURN".to_owned());
             return;
         }
+        // Movement is optional until the Hero chooses it, but it is the
+        // primary turn control and should retain the first button position
+        // even when an attack, spell, item, or stairway exit is already legal.
+        actions.push("[R] ROLL MOVEMENT".to_owned());
         if !available_active_artifacts(game).is_empty() {
             actions.push("[Y] USE ARTIFACT".to_owned());
         }
@@ -3984,7 +3988,6 @@ fn append_allowed_actions(game: &Game, actions: &mut Vec<String>) {
         if game.can_voluntarily_retreat() {
             actions.push("[N] END QUEST AT STAIRWAY".to_owned());
         }
-        actions.push("[R] ROLL MOVEMENT".to_owned());
         actions.push("[E] END TURN".to_owned());
         return;
     }
@@ -4228,7 +4231,7 @@ mod tests {
     }
 
     #[test]
-    fn adjacent_enemy_exposes_attack_before_the_movement_roll() {
+    fn movement_roll_is_first_even_when_an_adjacent_enemy_can_be_attacked() {
         let mut game = Game::demo(0x5052_4552_4f4c_4c).unwrap();
         let hero_pos = game.active_hero().unwrap().pos;
         let target = Direction::ALL
@@ -4250,6 +4253,10 @@ mod tests {
 
         let overlay = game_overlay(
             &game, None, false, None, None, None, 0, None, None, None, None,
+        );
+        assert_eq!(
+            overlay.actions.first().map(String::as_str),
+            Some("[R] ROLL MOVEMENT")
         );
         assert!(overlay.actions.iter().any(|action| action == "[F] ATTACK"));
         assert!(

@@ -39,13 +39,27 @@ crop_silhouette() {
         "$@" -trim +repage -resize '1400x1400>' -strip "$destination"
 }
 
-# Door fronts. The open arch needs the connected pale punch-out removed as
-# well as the black scanner bed. Coordinates are on the first of eight arches.
+crop_open_door() {
+    local source=$1
+    local destination=$2
+    # The pale doorway punch-out is too close in color to the mortar for a
+    # fuzzy flood fill: it leaks through the black joints and shreds the stone
+    # print. Crop a complete arch, remove only the connected scanner bed, then
+    # apply the known die-cut silhouette and opening as a geometric alpha mask.
+    # The first arch is used because its opening and cut lines are unobscured.
+    magick "$source" -crop '650x720+65+2275' +repage \
+        -alpha set -bordercolor '#050505' -border 2 -fuzz 8% \
+        -fill none -draw 'alpha 0,0 floodfill' -shave 2x2 \
+        -channel A \
+        -fx '((((j<=260)&&(((i-348)*(i-348)/52900.0+(j-260)*(j-260)/67600.0)<=1.0))||((j>=260)&&(j<=520)&&(i>=118)&&(i<=578))||((j>=520)&&(i>=145)&&(i<=550)))&&!(((j>=255)&&(j<=527)&&(i>=278)&&(i<=418))||(((i-348)*(i-348)+(j-255)*(j-255)<=4900)&&(j<255))))?u:0' \
+        -morphology Open Disk:2 +channel \
+        -trim +repage -resize '1400x1400>' -strip "$destination"
+}
+
+# Door fronts. Coordinates are on the first of eight arches.
 crop_silhouette "$page_1" '430x720+805+35' \
     "$output_dir/doors/closed.png"
-crop_silhouette "$page_3" '520x735+65+2260' \
-    "$output_dir/doors/open.png" \
-    -fuzz 18% -fill none -draw 'alpha 175,275 floodfill'
+crop_open_door "$page_3" "$output_dir/doors/open.png"
 
 # Furniture cardboard inserts. These are the printed faces/tops that slot into
 # the injection-moulded plastic frames represented by the runtime GLBs.

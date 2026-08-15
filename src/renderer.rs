@@ -3072,11 +3072,17 @@ fn draw_hud_overlay(state: &GameOverlay) -> image::RgbaImage {
             let columns = ((width.saturating_sub(12)) / 9).max(1) as usize;
             let max_lines = if height >= 38 { 2 } else { 1 };
             let label = hud_wrap_text(action, columns, max_lines);
-            let (label_size, label_y, line_advance) = if label.lines().count() == 1 {
-                (14.0, y as i32 + 12, 14)
+            let line_count = label.lines().count() as u32;
+            let (label_size, line_advance): (f32, i32) = if line_count == 1 && height >= 38 {
+                (18.0, 19)
+            } else if line_count == 1 {
+                (15.0, 16)
             } else {
-                (11.0, y as i32 + 2, 11)
+                (14.0, 15)
             };
+            let text_height =
+                label_size.ceil() as u32 + line_count.saturating_sub(1) * line_advance as u32;
+            let label_y = y as i32 + height.saturating_sub(text_height) as i32 / 2;
             draw_medieval_text(
                 &mut canvas,
                 &label,
@@ -3221,6 +3227,18 @@ fn medieval_pixel_size(scale: u32) -> f32 {
 
 fn medieval_line_advance(scale: u32) -> i32 {
     if scale == 1 { 12 } else { (10 * scale) as i32 }
+}
+
+/// Startup panels are rasterized at half their 2048-unit design resolution.
+/// Preserve each requested size instead of rounding pairs of sizes down to the
+/// same tiny integer scale (the old mapping made both scale 1 and scale 2 text
+/// only 12 pixels tall).
+fn startup_font_pixel_size(scale: u32) -> f32 {
+    5.0 * scale.max(1) as f32 + 7.0
+}
+
+fn startup_font_line_advance(scale: u32) -> i32 {
+    (startup_font_pixel_size(scale) * 1.10).ceil() as i32
 }
 
 fn medieval_text_width(text: &str, pixel_size: f32) -> f32 {
@@ -4870,7 +4888,6 @@ fn update_startup_panel(
 
     let draw_text =
         |canvas: &mut image::RgbaImage, text: &str, x: i32, y: i32, scale: u32, color: Rgba<u8>| {
-            let pixel_scale = ((scale + 1) / 2).max(1);
             let origin_x = x * STARTUP_TEXTURE_SIZE as i32 / STARTUP_DESIGN_SIZE as i32;
             let origin_y = y * STARTUP_TEXTURE_SIZE as i32 / STARTUP_DESIGN_SIZE as i32;
             draw_medieval_text(
@@ -4878,8 +4895,8 @@ fn update_startup_panel(
                 text,
                 origin_x,
                 origin_y,
-                medieval_pixel_size(pixel_scale),
-                medieval_line_advance(pixel_scale),
+                startup_font_pixel_size(scale),
+                startup_font_line_advance(scale),
                 color,
             );
         };
@@ -4971,14 +4988,12 @@ fn update_startup_panel(
             5,
             if hovered { white } else { gold },
         );
-        let pixel_scale = ((scale + 1) / 2).max(1);
-        let text_width = (medieval_text_width(label, medieval_pixel_size(pixel_scale)).ceil()
-            as u32)
+        let text_width = (medieval_text_width(label, startup_font_pixel_size(scale)).ceil() as u32)
             * STARTUP_DESIGN_SIZE
             / STARTUP_TEXTURE_SIZE;
         let text_x = x + width.saturating_sub(text_width) / 2;
         let text_height =
-            medieval_line_advance(pixel_scale) as u32 * STARTUP_DESIGN_SIZE / STARTUP_TEXTURE_SIZE;
+            startup_font_line_advance(scale) as u32 * STARTUP_DESIGN_SIZE / STARTUP_TEXTURE_SIZE;
         let text_y = y + height.saturating_sub(text_height) / 2;
         draw_text(
             canvas,
@@ -6490,17 +6505,24 @@ fn add_square_highlight(
 
 fn add_active_hero_halo(out: &mut Vec<InstanceRaw>, target: Pos, animation_time: f32) {
     let wave = (animation_time * 3.8).sin().mul_add(0.5, 0.5);
-    let center = board_world(target) + Vec3::Y * 0.094;
+    // Keep the ring above either the scanned or procedural board, but well
+    // below the movement overlay and the figure base. The former 0.094 height
+    // put its faces almost coplanar with the movement highlight.
+    let center = board_world(target) + Vec3::Y * 0.035;
     let radius = 0.43 + wave * 0.025;
     let color = [1.0, 0.76 + wave * 0.20, 0.08];
     let alpha = 0.66 + wave * 0.28;
-    const SEGMENTS: usize = 16;
+    const SEGMENTS: usize = 24;
+    let tangent_half_length = radius * (std::f32::consts::PI / SEGMENTS as f32).tan() * 0.90;
     for segment in 0..SEGMENTS {
         let angle = std::f32::consts::TAU * segment as f32 / SEGMENTS as f32;
         let position = center + Vec3::new(angle.cos() * radius, 0.0, angle.sin() * radius);
         out.push(InstanceRaw::with_alpha(
             Mat4::from_scale_rotation_translation(
-                Vec3::new(0.105, 0.012, 0.060),
+                // Local X is radial and local Z is tangential at this angle.
+                // A small gap between tangent spans prevents adjacent pieces
+                // from overlapping and fighting one another in the depth test.
+                Vec3::new(0.045, 0.004, tangent_half_length),
                 Quat::from_rotation_y(-angle),
                 position,
             ),
@@ -9120,6 +9142,23 @@ mod tests {
             (front_center.distance(back_center) - CARDBOARD_HALF_THICKNESS * 2.0).abs() < 0.000_01
         );
         assert!(CARDBOARD_HALF_THICKNESS * 2.0 < 0.06);
+
+        let path = local_art_root().join("components/doors/open.png");
+        let scan = image::open(&path)
+            .unwrap_or_else(|error| panic!("failed to open {}: {error}", path.display()))
+            .to_rgba8();
+        let (width, height) = scan.dimensions();
+        let opaque_fraction =
+            scan.pixels().filter(|pixel| pixel[3] >= 240).count() as f32 / (width * height) as f32;
+        assert!(
+            (0.68..0.82).contains(&opaque_fraction),
+            "open-door alpha mask retained only {:.1}% of the printed arch",
+            opaque_fraction * 100.0
+        );
+        assert_eq!(scan.get_pixel(0, 0)[3], 0);
+        assert_eq!(scan.get_pixel(width / 2, height / 2)[3], 0);
+        assert!(scan.get_pixel(width / 5, height / 2)[3] >= 240);
+        assert!(scan.get_pixel(width / 2, 0)[3] >= 240);
     }
 
     #[test]
@@ -9630,15 +9669,32 @@ mod tests {
         let mut bright = Vec::new();
         add_active_hero_halo(&mut dim, target, 0.0);
         add_active_hero_halo(&mut bright, target, std::f32::consts::PI / (2.0 * 3.8));
-        assert_eq!(dim.len(), 16);
-        assert_eq!(bright.len(), 16);
+        assert_eq!(dim.len(), 24);
+        assert_eq!(bright.len(), 24);
         assert!(bright[0].color[3] > dim[0].color[3]);
         let center = board_world(target);
         assert!(dim.iter().all(|instance| {
-            let position = Mat4::from_cols_array_2d(&instance.model).transform_point3(Vec3::ZERO);
+            let model = Mat4::from_cols_array_2d(&instance.model);
+            let position = model.transform_point3(Vec3::ZERO);
             let radius = position.xz().distance(center.xz());
-            (0.42..0.47).contains(&radius) && position.y < 0.11
+            let top = position.y + model.transform_vector3(Vec3::Y).length();
+            (0.42..0.47).contains(&radius) && top < 0.05
         }));
+
+        let mut movement = Vec::new();
+        add_square_highlight(&mut movement, target, [1.0, 0.42, 0.015], 0.0);
+        let movement_model = Mat4::from_cols_array_2d(&movement[0].model);
+        let movement_center = movement_model.transform_point3(Vec3::ZERO);
+        let movement_bottom =
+            movement_center.y - movement_model.transform_vector3(Vec3::Y).length();
+        let halo_top = dim
+            .iter()
+            .map(|instance| {
+                let model = Mat4::from_cols_array_2d(&instance.model);
+                model.transform_point3(Vec3::ZERO).y + model.transform_vector3(Vec3::Y).length()
+            })
+            .fold(f32::NEG_INFINITY, f32::max);
+        assert!(halo_top + 0.015 < movement_bottom);
     }
 
     #[test]
@@ -9805,6 +9861,8 @@ mod tests {
         let size = medieval_pixel_size(2);
         assert!(medieval_text_width("IIII", size) < medieval_text_width("WWWW", size));
         assert!(medieval_text_width("HEROQUEST | THE LOST WIZARD", size) < 900.0);
+        assert!(startup_font_pixel_size(2) >= 17.0);
+        assert!(startup_font_pixel_size(3) > startup_font_pixel_size(2));
 
         let mut canvas = image::RgbaImage::new(360, 64);
         draw_medieval_text(
