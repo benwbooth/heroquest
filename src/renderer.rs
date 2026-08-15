@@ -29,6 +29,9 @@ const STARTUP_DESIGN_SIZE: u32 = 2048;
 const STARTUP_TEXTURE_SIZE: u32 = 1024;
 const HUD_TEXTURE_WIDTH: u32 = 1024;
 const HUD_TEXTURE_HEIGHT: u32 = 640;
+const HUD_GAMEPLAY_TOP: u32 = 112;
+const HUD_GAMEPLAY_BOTTOM: u32 = 478;
+const HUD_GAMEPLAY_DIALOG_RIGHT: u32 = 610;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 struct HudViewport {
@@ -83,6 +86,49 @@ fn hud_pointer_at_screen(
         (x - viewport.x) * HUD_TEXTURE_WIDTH as f32 / viewport.width,
         (y - viewport.y) * HUD_TEXTURE_HEIGHT as f32 / viewport.height,
     ))
+}
+
+fn gameplay_design_size(dialog_visible: bool) -> (u32, u32) {
+    let width = if dialog_visible {
+        HUD_GAMEPLAY_DIALOG_RIGHT
+    } else {
+        HUD_TEXTURE_WIDTH
+    };
+    (width, HUD_GAMEPLAY_BOTTOM - HUD_GAMEPLAY_TOP)
+}
+
+fn gameplay_viewport(
+    output_width: u32,
+    output_height: u32,
+    dialog_visible: bool,
+) -> Option<HudViewport> {
+    let hud = hud_viewport(output_width, output_height)?;
+    let (design_width, design_height) = gameplay_design_size(dialog_visible);
+    Some(HudViewport {
+        x: hud.x,
+        y: hud.y + hud.height * HUD_GAMEPLAY_TOP as f32 / HUD_TEXTURE_HEIGHT as f32,
+        width: hud.width * design_width as f32 / HUD_TEXTURE_WIDTH as f32,
+        height: hud.height * design_height as f32 / HUD_TEXTURE_HEIGHT as f32,
+    })
+}
+
+fn gameplay_pointer_at_screen(
+    x: f32,
+    y: f32,
+    output_width: u32,
+    output_height: u32,
+    dialog_visible: bool,
+) -> Option<(f32, f32, u32, u32)> {
+    let (hud_x, hud_y) = hud_pointer_at_screen(x, y, output_width, output_height)?;
+    let (width, height) = gameplay_design_size(dialog_visible);
+    if hud_x < 0.0
+        || hud_x > width as f32
+        || hud_y < HUD_GAMEPLAY_TOP as f32
+        || hud_y > HUD_GAMEPLAY_BOTTOM as f32
+    {
+        return None;
+    }
+    Some((hud_x, hud_y - HUD_GAMEPLAY_TOP as f32, width, height))
 }
 const ZARGON_DICE_ROLL_CENTER: Vec3 = Vec3::new(8.4, 0.08, 17.0);
 const ZARGON_QUEST_BOOK_ANGLE: f32 = std::f32::consts::PI;
@@ -2107,11 +2153,17 @@ impl Renderer {
         }
     }
 
+    fn gameplay_dialog_visible(&self) -> bool {
+        self.hud_overlay
+            .last_state
+            .as_ref()
+            .is_some_and(|state| state.dialog.is_some())
+    }
+
     pub fn camera_relative_direction(&self, screen_direction: Direction) -> Direction {
-        self.camera.screen_relative_direction(
-            screen_direction,
-            self.config.width as f32 / self.config.height.max(1) as f32,
-        )
+        let (width, height) = gameplay_design_size(self.gameplay_dialog_visible());
+        self.camera
+            .screen_relative_direction(screen_direction, width as f32 / height as f32)
     }
 
     pub fn board_pos_at_screen(
@@ -2121,13 +2173,20 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<Pos> {
-        board_pos_at_screen(
-            &self.camera,
-            self.config.width as f32 / self.config.height.max(1) as f32,
+        let (x, y, width, height) = gameplay_pointer_at_screen(
             x,
             y,
             input_width,
             input_height,
+            self.gameplay_dialog_visible(),
+        )?;
+        board_pos_at_screen(
+            &self.camera,
+            width as f32 / height as f32,
+            x,
+            y,
+            width,
+            height,
         )
     }
 
@@ -2140,15 +2199,22 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<HeroSpellTarget> {
-        hero_spell_target_at_screen(
-            &self.camera,
-            game,
-            spell,
-            self.config.width as f32 / self.config.height.max(1) as f32,
+        let (x, y, width, height) = gameplay_pointer_at_screen(
             x,
             y,
             input_width,
             input_height,
+            self.gameplay_dialog_visible(),
+        )?;
+        hero_spell_target_at_screen(
+            &self.camera,
+            game,
+            spell,
+            width as f32 / height as f32,
+            x,
+            y,
+            width,
+            height,
         )
     }
 
@@ -2164,13 +2230,20 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<TabletopSurface> {
-        let target = tabletop_hit_target_at_screen(
-            &self.camera,
-            self.config.width as f32 / self.config.height.max(1) as f32,
+        let (x, y, width, height) = gameplay_pointer_at_screen(
             x,
             y,
             input_width,
             input_height,
+            self.gameplay_dialog_visible(),
+        )?;
+        let target = tabletop_hit_target_at_screen(
+            &self.camera,
+            width as f32 / height as f32,
+            x,
+            y,
+            width,
+            height,
         )?;
         match target {
             TabletopHitTarget::Player(surface) => self.player_stations.as_ref().map(|_| surface),
@@ -2407,12 +2480,15 @@ impl Renderer {
                 bytemuck::cast_slice(&dice_decal_instances),
             );
         }
-        let aspect = self.config.width as f32 / self.config.height.max(1) as f32;
+        let gameplay = gameplay_viewport(
+            self.config.width,
+            self.config.height,
+            overlay.dialog.is_some(),
+        )
+        .expect("a configured surface always has a non-zero gameplay viewport");
+        let aspect = gameplay.width / gameplay.height;
         let camera_uniform = CameraUniform {
-            view_projection: self
-                .camera
-                .matrix(self.config.width as f32 / self.config.height as f32)
-                .to_cols_array_2d(),
+            view_projection: self.camera.matrix(aspect).to_cols_array_2d(),
             animation: [elapsed, self.camera.yaw, self.camera.pitch, aspect],
         };
         self.queue
@@ -2467,6 +2543,14 @@ impl Renderer {
                 occlusion_query_set: None,
                 multiview_mask: None,
             });
+            pass.set_viewport(
+                gameplay.x,
+                gameplay.y,
+                gameplay.width,
+                gameplay.height,
+                0.0,
+                1.0,
+            );
             if let Some(backdrop) = &self.environment_backdrop {
                 pass.set_pipeline(&backdrop.pipeline);
                 pass.set_bind_group(0, &self.camera_bind_group, &[]);
@@ -3162,17 +3246,17 @@ fn draw_hud_overlay(state: &GameOverlay) -> image::RgbaImage {
     }
 
     if let Some(dialog) = &state.dialog {
-        hud_fill_rect(&mut canvas, 205, 165, 626, 300, Rgba([0, 0, 0, 150]));
-        hud_fill_rect(&mut canvas, 197, 157, 626, 300, modal_panel);
-        hud_outline_rect(&mut canvas, 197, 157, 626, 300, 5, gold);
-        hud_outline_rect(&mut canvas, 207, 167, 606, 280, 1, muted);
-        hud_corner_ornaments(&mut canvas, 197, 157, 626, 300, pale_gold);
-        let title = hud_wrap_text(&dialog.title, 20, 2);
-        hud_draw_text(&mut canvas, &title, 244, 198, 3, pale_gold);
-        let body = hud_wrap_text(&dialog.body, 29, 6);
-        hud_draw_text(&mut canvas, &body, 244, 274, 2, parchment);
-        let hint = hud_wrap_text(&dialog.hint, 29, 2);
-        hud_draw_text(&mut canvas, &hint, 244, 404, 2, gold);
+        hud_fill_rect(&mut canvas, 634, 125, 370, 348, Rgba([0, 0, 0, 150]));
+        hud_fill_rect(&mut canvas, 626, 117, 370, 348, modal_panel);
+        hud_outline_rect(&mut canvas, 626, 117, 370, 348, 5, gold);
+        hud_outline_rect(&mut canvas, 636, 127, 350, 328, 1, muted);
+        hud_corner_ornaments(&mut canvas, 626, 117, 370, 348, pale_gold);
+        let title = hud_wrap_text(&dialog.title, 15, 2);
+        hud_draw_text(&mut canvas, &title, 650, 145, 3, pale_gold);
+        let body = hud_wrap_text(&dialog.body, 17, 8);
+        hud_draw_text(&mut canvas, &body, 650, 218, 2, parchment);
+        let hint = hud_wrap_text(&dialog.hint, 17, 2);
+        hud_draw_text(&mut canvas, &hint, 650, 414, 2, gold);
     }
     canvas
 }
@@ -10039,6 +10123,24 @@ mod tests {
     }
 
     #[test]
+    fn gameplay_viewport_never_intersects_osd_or_targeting_dialogs() {
+        let normal = gameplay_viewport(1440, 900, false).unwrap();
+        let targeting = gameplay_viewport(1440, 900, true).unwrap();
+        assert!((normal.y - 157.5).abs() < 0.001);
+        assert!((normal.height - 514.6875).abs() < 0.001);
+        assert_eq!(normal.width, 1440.0);
+        assert!(targeting.x + targeting.width < normal.x + normal.width);
+        assert_eq!(targeting.y, normal.y);
+        assert_eq!(targeting.height, normal.height);
+
+        assert!(gameplay_pointer_at_screen(720.0, 100.0, 1440, 900, false).is_none());
+        assert!(gameplay_pointer_at_screen(1200.0, 400.0, 1440, 900, true).is_none());
+        let center = gameplay_pointer_at_screen(429.0, 415.0, 1440, 900, true).unwrap();
+        assert!((center.0 - HUD_GAMEPLAY_DIALOG_RIGHT as f32 * 0.5).abs() < 1.0);
+        assert!((center.1 - (HUD_GAMEPLAY_BOTTOM - HUD_GAMEPLAY_TOP) as f32 * 0.5).abs() < 1.0);
+    }
+
+    #[test]
     fn hud_panels_and_modal_are_rasterized_inside_the_screen_texture() {
         let overlay = GameOverlay {
             heading: "HEROQUEST | THE LOST WIZARD".to_owned(),
@@ -10055,7 +10157,8 @@ mod tests {
         assert_eq!(canvas.dimensions(), (HUD_TEXTURE_WIDTH, HUD_TEXTURE_HEIGHT));
         assert_eq!(canvas.get_pixel(1023, 0).0[3], 0);
         assert!(canvas.get_pixel(997, 17).0[3] > 0);
-        assert!(canvas.get_pixel(197, 157).0[3] > 0);
+        assert!(canvas.get_pixel(626, 117).0[3] > 0);
+        assert_eq!(canvas.get_pixel(300, 300).0[3], 0);
         if let Some(path) = std::env::var_os("HEROQUEST_UI_PREVIEW") {
             canvas.save(path).unwrap();
         }
