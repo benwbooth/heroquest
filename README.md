@@ -243,3 +243,11 @@ generated foreground model or another room plate without replacing them, set:
 HEROQUEST_ROOM_MODEL=/path/to/castle-room.glb cargo run
 HEROQUEST_ROOM_MATTE=/path/to/table-free-room.png cargo run
 ```
+
+## License
+
+The repository contributors dedicate their original contributions to the
+public domain under [CC0 1.0 Universal](LICENSE). See [NOTICE.md](NOTICE.md) for
+the precise scope and the third-party font, HeroQuest intellectual property,
+scan-derived data, and private local-asset exclusions. CC0 does not grant rights
+in material the contributors do not own.

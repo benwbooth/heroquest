@@ -12,7 +12,7 @@
     "project-authored": {
       "url": null,
       "author": "HeroQuest 3D board project",
-      "license": "project-license",
+      "license": "CC0-1.0",
       "format": "GLB",
       "textures": true,
       "notes": "Simple runtime geometry authored for this implementation from component measurements and private visual reference."
@@ -28,7 +28,7 @@
     "classic-scan-weapon-kitbash": {
       "url": "https://www.thingiverse.com/thing:3771123",
       "author": "Carlbark scan with HeroQuest 3D board project weapon geometry",
-      "license": "CC-BY-4.0 base scan plus project-license additions",
+      "license": "CC-BY-4.0 base scan plus CC0-1.0 project additions",
       "format": "GLB",
       "textures": false,
       "notes": "Retains the licensed classic square-base Orc scan. The notched captain blade follows original-US miniature photographs and the CC-BY Pekk-O modification description; Grak's staff is quest-specific project geometry because no staff-Orc sculpt existed in the box."
