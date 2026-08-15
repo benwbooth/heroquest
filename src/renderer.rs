@@ -1533,6 +1533,7 @@ struct StartupScene {
     panel_texture: wgpu::Texture,
     panel_bind_group: wgpu::BindGroup,
     panel_state: Option<StartupFlow>,
+    panel_caret_visible: bool,
 }
 
 struct PlayerStations {
@@ -2778,11 +2779,15 @@ impl Renderer {
         };
         let mut panel_state = startup.clone();
         panel_state.hovered = None;
+        let caret_visible =
+            startup.stage == StartupStage::PlayerSetup && startup_name_caret_visible(elapsed);
         if !matches!(startup.stage, StartupStage::Box | StartupStage::Playing)
-            && scene.panel_state.as_ref() != Some(&panel_state)
+            && (scene.panel_state.as_ref() != Some(&panel_state)
+                || scene.panel_caret_visible != caret_visible)
         {
-            update_startup_panel(&self.queue, scene, &panel_state, campaign)?;
+            update_startup_panel(&self.queue, scene, &panel_state, campaign, caret_visible)?;
             scene.panel_state = Some(panel_state);
+            scene.panel_caret_visible = caret_visible;
         }
 
         let frame = match self.surface.get_current_texture() {
@@ -4805,6 +4810,7 @@ fn load_startup_scene(
         panel_texture,
         panel_bind_group,
         panel_state: None,
+        panel_caret_visible: false,
     }))
 }
 
@@ -4929,11 +4935,24 @@ fn startup_box_mesh() -> (Vec<BoardVertex>, Vec<u16>, [std::ops::Range<u32>; 6])
     (vertices, indices, ranges)
 }
 
+fn startup_name_caret_visible(elapsed: f32) -> bool {
+    ((elapsed.max(0.0) * 2.0).floor() as u64).is_multiple_of(2)
+}
+
+fn startup_name_field_text(name: &str, selected: bool, caret_visible: bool) -> String {
+    if selected && caret_visible {
+        format!("Name: {name}|")
+    } else {
+        format!("Name: {name}")
+    }
+}
+
 fn update_startup_panel(
     queue: &wgpu::Queue,
     scene: &StartupScene,
     startup: &StartupFlow,
     campaign: &Campaign,
+    caret_visible: bool,
 ) -> Result<()> {
     use image::{GenericImage, Rgba, imageops};
 
@@ -5426,7 +5445,7 @@ fn update_startup_panel(
                 );
                 draw_text(
                     &mut canvas,
-                    &format!("Name: {}", hero.hero_name),
+                    &startup_name_field_text(&hero.hero_name, selected, caret_visible),
                     990,
                     y + 60,
                     2,
@@ -9927,6 +9946,18 @@ mod tests {
         let lines = wrapped.lines().collect::<Vec<_>>();
         assert!(lines.len() <= 4);
         assert!(lines.iter().all(|line| line.len() <= 24));
+    }
+
+    #[test]
+    fn selected_startup_name_field_has_a_half_second_blinking_caret() {
+        assert!(startup_name_caret_visible(0.0));
+        assert!(startup_name_caret_visible(0.49));
+        assert!(!startup_name_caret_visible(0.5));
+        assert!(!startup_name_caret_visible(0.99));
+        assert!(startup_name_caret_visible(1.0));
+        assert_eq!(startup_name_field_text("Conan", true, true), "Name: Conan|");
+        assert_eq!(startup_name_field_text("Conan", true, false), "Name: Conan");
+        assert_eq!(startup_name_field_text("Conan", false, true), "Name: Conan");
     }
 
     #[test]
