@@ -66,7 +66,10 @@ the correct physical component, and have a deterministic regression test.
   rigid bodies. Earth-scaled Rapier throws, face distributions, exact
   scan-derived skull/lion-shield/monster-shield art, recessed round movement
   pips, all eight owned rack pieces at every Hero station, and force-scaled
-  low-latency die-on-wood collision audio all work.
+  low-latency die-on-wood collision audio all work. Procedural event SFX are
+  rules-driven as well: movement steps, weapon attacks, damage, spell casts,
+  doors, searches, turn handoffs, and quest completion each have a distinct
+  nonblocking cue.
 - [x] Import and render the 35 real classic figure pieces as 18 distinct GLBs:
   four Heroes; four Orc sculpts; three Goblin sculpts; Fimir; Chaos Warrior;
   Chaos Warlock; Gargoyle; Skeleton; Zombie; Mummy. The notched Orc uses the

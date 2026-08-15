@@ -6,7 +6,7 @@ use std::{
 };
 
 use anyhow::Result;
-use heroquest::audio::TabletopDiceAudio;
+use heroquest::audio::{GameAudio, SoundEffect};
 use heroquest::campaign::Campaign;
 use heroquest::cards::{Artifact, ChaosSpell, HeroSpell};
 use heroquest::dice::{DiceTray, DieResult};
@@ -46,6 +46,112 @@ struct PlannedMovement {
     destination: Pos,
     steps: VecDeque<Direction>,
     next_step_at: Instant,
+}
+
+#[derive(Debug, Clone, PartialEq, Eq)]
+struct GameSoundSnapshot {
+    units: Vec<(u32, Pos, i16)>,
+    opened_doors: usize,
+    discarded_spells: usize,
+    phase: GamePhase,
+}
+
+impl GameSoundSnapshot {
+    fn capture(game: &Game) -> Self {
+        Self {
+            units: game
+                .units
+                .iter()
+                .map(|unit| (unit.id, unit.pos, unit.body))
+                .collect(),
+            opened_doors: game.doors.iter().filter(|door| door.open).count(),
+            discarded_spells: game.discarded_chaos_spells.len()
+                + game
+                    .units
+                    .iter()
+                    .map(|unit| unit.discarded_hero_spells.len())
+                    .sum::<usize>(),
+            phase: game.phase,
+        }
+    }
+
+    fn update(&mut self, game: &Game) {
+        self.units.clear();
+        self.units
+            .extend(game.units.iter().map(|unit| (unit.id, unit.pos, unit.body)));
+        self.opened_doors = game.doors.iter().filter(|door| door.open).count();
+        self.discarded_spells = game.discarded_chaos_spells.len()
+            + game
+                .units
+                .iter()
+                .map(|unit| unit.discarded_hero_spells.len())
+                .sum::<usize>();
+        self.phase = game.phase;
+    }
+}
+
+struct GameSoundTracker {
+    previous: GameSoundSnapshot,
+}
+
+impl GameSoundTracker {
+    fn new(game: &Game) -> Self {
+        Self {
+            previous: GameSoundSnapshot::capture(game),
+        }
+    }
+
+    fn reset(&mut self, game: &Game) {
+        self.previous.update(game);
+    }
+
+    fn advance(&mut self, game: &Game) -> [Option<SoundEffect>; 5] {
+        let mut effects = [None; 5];
+        let mut effect_count = 0;
+        let mut push = |effect| {
+            effects[effect_count] = Some(effect);
+            effect_count += 1;
+        };
+
+        if game
+            .units
+            .iter()
+            .zip(&self.previous.units)
+            .any(|(unit, (old_id, old_pos, _))| unit.id == *old_id && unit.pos != *old_pos)
+        {
+            push(SoundEffect::Movement);
+        }
+        let opened_doors = game.doors.iter().filter(|door| door.open).count();
+        if opened_doors > self.previous.opened_doors {
+            push(SoundEffect::DoorOpen);
+        }
+        let discarded_spells = game.discarded_chaos_spells.len()
+            + game
+                .units
+                .iter()
+                .map(|unit| unit.discarded_hero_spells.len())
+                .sum::<usize>();
+        if discarded_spells > self.previous.discarded_spells {
+            push(SoundEffect::Spell);
+        }
+        if game
+            .units
+            .iter()
+            .zip(&self.previous.units)
+            .any(|(unit, (old_id, _, old_body))| unit.id == *old_id && unit.body < *old_body)
+        {
+            push(SoundEffect::Damage);
+        }
+        if game.phase != self.previous.phase {
+            push(if game.phase == GamePhase::Won {
+                SoundEffect::QuestComplete
+            } else {
+                SoundEffect::Turn
+            });
+        }
+        self.previous.update(game);
+        effects
+    }
 }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
@@ -401,13 +507,15 @@ fn main() -> Result<()> {
 
     let sdl = sdl3::init()?;
     let video = sdl.video()?;
-    let dice_audio = match TabletopDiceAudio::new(&sdl) {
+    let game_audio = match GameAudio::new(&sdl) {
         Ok(audio) => Some(audio),
         Err(error) => {
-            log::warn!("tabletop impact audio unavailable; continuing silently: {error}");
+            log::warn!("game audio unavailable; continuing silently: {error}");
             None
         }
     };
+    let mut game_sound_tracker = GameSoundTracker::new(&game);
+    let mut game_audio_tracking = startup.stage == StartupStage::Playing;
     let mut window = video
         .window("HeroQuest 3D board", 1440, 900)
         .position_centered()
@@ -484,6 +592,9 @@ fn main() -> Result<()> {
             && dice_animation.is_none()
             && let Some(plan) = game.take_pending_forced_attack()
         {
+            if let Some(audio) = &game_audio {
+                audio.play_effect(SoundEffect::Attack);
+            }
             renderer.focus_combat(plan.attacker, plan.defender);
             next_seed = next_seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
             let attacker = game
@@ -822,6 +933,7 @@ fn main() -> Result<()> {
                                         plan,
                                         &mut dice_animation,
                                         &mut next_seed,
+                                        game_audio.as_ref(),
                                     );
                                     attack_ui = None;
                                     arrow_cursor.set();
@@ -1712,6 +1824,7 @@ fn main() -> Result<()> {
                                     plan,
                                     &mut dice_animation,
                                     &mut next_seed,
+                                    game_audio.as_ref(),
                                 );
                                 attack_ui = None;
                             }
@@ -1956,11 +2069,14 @@ fn main() -> Result<()> {
                             }
                             Err(error) => game.notify(error.to_string()),
                         },
-                        Keycode::T => {
-                            if let Err(error) = game.search_treasure() {
-                                game.notify(error.to_string());
+                        Keycode::T => match game.search_treasure() {
+                            Ok(_) => {
+                                if let Some(audio) = &game_audio {
+                                    audio.play_effect(SoundEffect::Search);
+                                }
                             }
-                        }
+                            Err(error) => game.notify(error.to_string()),
+                        },
                         Keycode::C => match game.begin_active_healing_potion() {
                             Ok(HealingPotionUse::Restored { .. }) => {}
                             Ok(HealingPotionUse::RollRedDie { hero }) => {
@@ -2053,16 +2169,22 @@ fn main() -> Result<()> {
                                 game.notify(error.to_string());
                             }
                         }
-                        Keycode::L => {
-                            if let Err(error) = game.search_secret_doors() {
-                                game.notify(error.to_string());
+                        Keycode::L => match game.search_secret_doors() {
+                            Ok(_) => {
+                                if let Some(audio) = &game_audio {
+                                    audio.play_effect(SoundEffect::Search);
+                                }
                             }
-                        }
-                        Keycode::P => {
-                            if let Err(error) = game.search_traps() {
-                                game.notify(error.to_string());
+                            Err(error) => game.notify(error.to_string()),
+                        },
+                        Keycode::P => match game.search_traps() {
+                            Ok(_) => {
+                                if let Some(audio) = &game_audio {
+                                    audio.play_effect(SoundEffect::Search);
+                                }
                             }
-                        }
+                            Err(error) => game.notify(error.to_string()),
+                        },
                         Keycode::X => match game.active_disarm_plan() {
                             Ok(plan) => {
                                 next_seed = next_seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
@@ -2180,7 +2302,7 @@ fn main() -> Result<()> {
             let now = Instant::now();
             animation.advance_physics(now);
             for strength in animation.tray.drain_impacts() {
-                if let Some(audio) = &dice_audio {
+                if let Some(audio) = &game_audio {
                     audio.play_impact(strength);
                 }
             }
@@ -2481,6 +2603,9 @@ fn main() -> Result<()> {
                     zargon_next_step_at = Instant::now() + Duration::from_millis(620);
                 }
                 Ok(ZargonStep::Attack(plan)) => {
+                    if let Some(audio) = &game_audio {
+                        audio.play_effect(SoundEffect::Attack);
+                    }
                     renderer.focus_combat(plan.attacker, plan.defender);
                     next_seed = next_seed.wrapping_add(0x9e37_79b9_7f4a_7c15);
                     let attacker = game
@@ -2574,6 +2699,18 @@ fn main() -> Result<()> {
         }
 
         if startup.stage == StartupStage::Playing {
+            if game_audio_tracking {
+                if let Some(audio) = &game_audio {
+                    for effect in game_sound_tracker.advance(&game).into_iter().flatten() {
+                        audio.play_effect(effect);
+                    }
+                } else {
+                    game_sound_tracker.reset(&game);
+                }
+            } else {
+                game_sound_tracker.reset(&game);
+                game_audio_tracking = true;
+            }
             window.set_title(&format!("HeroQuest - {}", game.title))?;
             let poses = dice_animation
                 .as_ref()
@@ -2601,6 +2738,8 @@ fn main() -> Result<()> {
             }
             renderer.render(&game, &poses, &overlay)?;
         } else {
+            game_audio_tracking = false;
+            game_sound_tracker.reset(&game);
             window.set_title("HeroQuest - Original US Game System")?;
             renderer.render_startup(&startup, &campaign, startup_clock.elapsed().as_secs_f32())?;
         }
@@ -2954,7 +3093,11 @@ fn begin_selected_attack(
     plan: AttackPlan,
     dice_animation: &mut Option<DiceAnimation>,
     next_seed: &mut u64,
+    audio: Option<&GameAudio>,
 ) {
+    if let Some(audio) = audio {
+        audio.play_effect(SoundEffect::Attack);
+    }
     renderer.set_selection_highlights(Vec::new());
     renderer.focus_combat(plan.attacker, plan.defender);
     *next_seed = (*next_seed).wrapping_add(0x9e37_79b9_7f4a_7c15);
@@ -4119,12 +4262,13 @@ fn append_hero_interactions(game: &Game, actions: &mut Vec<String>) {
 #[cfg(test)]
 mod tests {
     use super::{
-        AppEvent, ArtifactUi, AttackUi, DiceAnimation, DicePurpose, DoorUi, PotionUi, ShareUi,
-        SheetNameEdit, SpellUi, adjacent_door_at_board_pos, apply_sheet_name_edit_overlay,
-        apply_tabletop_overlay, commit_character_sheet_name, decode_app_event, dice_click_locked,
-        game_overlay, game_overlay_for_campaign, overlay_action_key, queue_planned_movement,
-        spell_target_at_board_pos,
+        AppEvent, ArtifactUi, AttackUi, DiceAnimation, DicePurpose, DoorUi, GameSoundTracker,
+        PotionUi, ShareUi, SheetNameEdit, SpellUi, adjacent_door_at_board_pos,
+        apply_sheet_name_edit_overlay, apply_tabletop_overlay, commit_character_sheet_name,
+        decode_app_event, dice_click_locked, game_overlay, game_overlay_for_campaign,
+        overlay_action_key, queue_planned_movement, spell_target_at_board_pos,
     };
+    use heroquest::audio::SoundEffect;
     use heroquest::campaign::Campaign;
     use heroquest::cards::{Artifact, ChaosSpell, HeroSpell};
     use heroquest::dice::DiceTray;
@@ -4163,6 +4307,64 @@ mod tests {
             }
             _ => panic!("pinch update decoded as the wrong event type"),
         }
+    }
+
+    #[test]
+    fn rules_state_emits_the_expected_gameplay_sound_cues() {
+        let mut game = Game::demo(0x534f_554e_44).unwrap();
+        let mut tracker = GameSoundTracker::new(&game);
+        let hero = game.hero_order[0];
+
+        game.units
+            .iter_mut()
+            .find(|unit| unit.id == hero)
+            .unwrap()
+            .pos
+            .x += 1;
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::Movement), None, None, None, None]
+        );
+
+        let door = game.doors.iter_mut().find(|door| !door.open).unwrap();
+        door.open = true;
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::DoorOpen), None, None, None, None]
+        );
+
+        game.units
+            .iter_mut()
+            .find(|unit| unit.id == hero)
+            .unwrap()
+            .discarded_hero_spells
+            .push(HeroSpell::Tempest);
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::Spell), None, None, None, None]
+        );
+
+        game.units
+            .iter_mut()
+            .find(|unit| unit.id == hero)
+            .unwrap()
+            .body -= 1;
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::Damage), None, None, None, None]
+        );
+
+        game.phase = GamePhase::ZargonTurn;
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::Turn), None, None, None, None]
+        );
+
+        game.phase = GamePhase::Won;
+        assert_eq!(
+            tracker.advance(&game),
+            [Some(SoundEffect::QuestComplete), None, None, None, None]
+        );
     }
 
     #[test]

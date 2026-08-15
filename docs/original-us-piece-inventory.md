@@ -98,7 +98,9 @@ the fittings have no quest rules and remain decorative.
   geometry, mass, pips, and visual mesh agree. The runtime uses circular ivory
   pip decals with a dark inset well rather than raised block geometry. Both die
   types emit SDL tabletop impacts from Rapier contact-force events; audio gain
-  follows measured collision energy rather than a roll timer.
+  follows measured collision energy rather than a roll timer. The same
+  nonblocking SDL mixer layers distinct procedural movement, attack, damage,
+  spell, door, search, turn, and quest-completion cues from rules-engine state.
 - 1 Information Screen: this is the folded cardboard GM/Zargon screen the user
   called the “shield.” It is not a plastic miniature and did not need a plastic
   stand in the original box. Build a thin three-panel mesh, slightly folded,
