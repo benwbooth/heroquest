@@ -16,10 +16,14 @@
               cargo
               clippy
               cmake
+              curl
+              imagemagick
               ninja
               pkg-config
+              poppler-utils
               rustc
               rustfmt
+              unrar-free
             ];
 
             buildInputs = with pkgs; [

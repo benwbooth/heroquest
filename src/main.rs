@@ -2,10 +2,11 @@ use std::{
     collections::VecDeque,
     mem::MaybeUninit,
     path::{Path, PathBuf},
+    process::Command,
     time::{Duration, Instant, SystemTime, UNIX_EPOCH},
 };
 
-use anyhow::Result;
+use anyhow::{Context, Result};
 use heroquest::audio::{GameAudio, SoundEffect};
 use heroquest::campaign::Campaign;
 use heroquest::cards::{Artifact, ChaosSpell, HeroSpell};
@@ -23,6 +24,10 @@ use heroquest::renderer::{GameOverlay, OverlayDialog, Renderer, TabletopSurface,
 use heroquest::startup::{StartupFlow, StartupStage};
 use sdl3::event::{Event, WindowEvent};
 use sdl3::keyboard::{Keycode, Mod};
+use sdl3::messagebox::{
+    ButtonData, ClickedButton, MessageBoxButtonFlag, MessageBoxFlag, show_message_box,
+    show_simple_message_box,
+};
 use sdl3::mouse::{Cursor, MouseButton, SystemCursor};
 
 enum DicePurpose {
@@ -455,6 +460,106 @@ fn commit_character_sheet_name(
     Ok(name)
 }
 
+fn original_us_art_root() -> PathBuf {
+    std::env::var_os("HEROQUEST_ART_DIR").map_or_else(
+        || PathBuf::from("assets/local/editions/original-us"),
+        PathBuf::from,
+    )
+}
+
+fn original_us_scan_art_is_installed() -> bool {
+    let root = original_us_art_root();
+    [
+        root.join("board-runtime.jpg"),
+        root.join("startup/box/top.jpg"),
+        root.join("screen/information-screen-front.png"),
+        root.join("tabletop/player/character-sheet.png"),
+        root.join("components/doors/open.png"),
+        root.join("dice/skull.png"),
+    ]
+    .into_iter()
+    .all(|path| path.is_file())
+}
+
+fn original_us_installer_path() -> Option<PathBuf> {
+    if let Some(path) = std::env::var_os("HEROQUEST_ASSET_INSTALLER").map(PathBuf::from) {
+        return path.is_file().then_some(path);
+    }
+    let source_tree =
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("tools/install-original-us-scan-pack.sh");
+    if source_tree.is_file() {
+        return Some(source_tree);
+    }
+    std::env::current_exe()
+        .ok()
+        .and_then(|executable| executable.parent().map(Path::to_path_buf))
+        .map(|directory| directory.join("tools/install-original-us-scan-pack.sh"))
+        .filter(|path| path.is_file())
+}
+
+fn confirm_and_install_original_us_scan_art() -> Result<bool> {
+    if original_us_scan_art_is_installed() {
+        return Ok(true);
+    }
+
+    let buttons = [
+        ButtonData {
+            flags: MessageBoxButtonFlag::RETURNKEY_DEFAULT,
+            button_id: 1,
+            text: "I Accept - Download",
+        },
+        ButtonData {
+            flags: MessageBoxButtonFlag::ESCAPEKEY_DEFAULT,
+            button_id: 0,
+            text: "Quit",
+        },
+    ];
+    let warning = "The original-US scanned artwork is not installed.\n\n\
+        If you continue, HeroQuest 3D will request HQ Game System US.rar directly from \
+        heroquestadventure.com. This project does not host or relay the archive. The download is \
+        about 1.77 GiB and preparation needs roughly 5 GiB of free disk space.\n\n\
+        HeroQuest artwork, names, and trademarks belong to their respective owners. You are \
+        responsible for determining whether downloading and using these files is permitted where \
+        you live and under the source site's terms. This fan project is not affiliated with or \
+        endorsed by Hasbro or Avalon Hill.\n\n\
+        Select I Accept - Download to assume responsibility and continue, or Quit to leave the \
+        files untouched.";
+    let accepted = matches!(
+        show_message_box(
+            MessageBoxFlag::WARNING,
+            &buttons,
+            "Original-US artwork download",
+            warning,
+            None,
+            None,
+        )
+        .map_err(|error| anyhow::anyhow!(error.to_string()))?,
+        ClickedButton::CustomButton(button) if button.button_id == 1
+    );
+    if !accepted {
+        return Ok(false);
+    }
+
+    let installer = original_us_installer_path().context(
+        "the original-US asset installer is not available beside this build; set \
+         HEROQUEST_ASSET_INSTALLER to its path",
+    )?;
+    let status = Command::new("bash")
+        .arg(&installer)
+        .arg("--accept-liability")
+        .env("HEROQUEST_ART_DIR", original_us_art_root())
+        .status()
+        .with_context(|| format!("failed to launch asset installer {}", installer.display()))?;
+    if !status.success() {
+        anyhow::bail!("original-US asset installer exited with {status}");
+    }
+    anyhow::ensure!(
+        original_us_scan_art_is_installed(),
+        "asset installer finished without producing the complete runtime scan pack"
+    );
+    Ok(true)
+}
+
 fn main() -> Result<()> {
     env_logger::init();
     let quest_path = quest_path_from_args()?;
@@ -507,6 +612,22 @@ fn main() -> Result<()> {
 
     let sdl = sdl3::init()?;
     let video = sdl.video()?;
+    match confirm_and_install_original_us_scan_art() {
+        Ok(true) => {}
+        Ok(false) => return Ok(()),
+        Err(error) => {
+            let _ = show_simple_message_box(
+                MessageBoxFlag::ERROR,
+                "Original-US artwork installation failed",
+                &format!(
+                    "HeroQuest 3D could not prepare the scan-backed artwork:\n\n{error:#}\n\n\
+                     The partial download is retained so the next attempt can resume."
+                ),
+                None,
+            );
+            return Err(error);
+        }
+    }
     let game_audio = match GameAudio::new(&sdl) {
         Ok(audio) => Some(audio),
         Err(error) => {

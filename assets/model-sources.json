@@ -34,9 +34,9 @@
       "notes": "Retains the licensed classic square-base Orc scan. The notched captain blade follows original-US miniature photographs and the CC-BY Pekk-O modification description; Grak's staff is quest-specific project geometry because no staff-Orc sculpt existed in the box."
     },
     "original_us_scan_pack": {
-      "url": null,
-      "author": "user-owned local scan pack",
-      "license": "private-local-use",
+      "url": "http://heroquestadventure.com/scans/HQ%20Game%20System%20US/HQ%20Game%20System%20US.rar",
+      "author": "HeroQuest Adventures scan catalog",
+      "license": "source-site-hosted copyrighted scans; user accepts responsibility for local use",
       "format": "PNG and PDF",
       "textures": true,
       "notes": "Already installed under assets/local/editions/original-us; source for board, cardboard furniture inserts, door inserts, markers, dice symbols, and both faces of the Information Screen."

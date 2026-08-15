@@ -136,7 +136,22 @@ limited to the game and quest name.
 
 ## Local scans
 
-The default art root is `assets/local/editions/original-us/`. Run
+The default art root is `assets/local/editions/original-us/`. On a clean first
+run, the game displays a warning and offers to download `HQ Game System US.rar`
+directly from `heroquestadventure.com`. The repository and release packages do
+not host or relay the archive. The installer resumes partial transfers, checks
+the known SHA-256 before extraction, and generates all scan-backed runtime
+textures locally. It can also be run explicitly:
+
+```sh
+tools/install-original-us-scan-pack.sh --accept-liability
+```
+
+The download is about 1.77 GiB and the prepared private pack needs roughly 5
+GiB. `curl`, `unrar`, Poppler's `pdftoppm`, and ImageMagick's `magick` must be
+available while the current source-tree installer runs.
+
+To use your own files instead, run
 `tools/import-local-assets.sh` with a legally obtained quest-book PDF and,
 optionally, a scan/photo of your physical board and a rulebook PDF:
 
@@ -144,10 +159,10 @@ optionally, a scan/photo of your physical board and a rulebook PDF:
 tools/import-local-assets.sh /path/to/quest-book.pdf /path/to/board.png /path/to/rulebook.pdf
 ```
 
-The importer never downloads anything and never stages the result for Git. A
-copied `board-scan.png`, `board-scan.jpg`, or `board-scan.jpeg` in the selected
-edition directory is detected automatically on the next run. You can instead
-point at any image without copying it:
+The manual importer never downloads anything, and neither installer stages its
+result for Git. A copied `board-scan.png`, `board-scan.jpg`, or
+`board-scan.jpeg` in the selected edition directory is detected automatically
+on the next run. You can instead point at any image without copying it:
 
 ```sh
 HEROQUEST_BOARD_SCAN=/path/to/cropped-board.png cargo run

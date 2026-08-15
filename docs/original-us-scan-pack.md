@@ -4,6 +4,17 @@ The private runtime pack at `assets/local/editions/original-us/` is the
 original North American/US Game System edition. It must not be confused with
 the original UK edition or the 2021 remake.
 
+The game retrieves the archive directly from the HeroQuest Adventures scan
+catalog when the user accepts the first-run warning:
+
+```text
+http://heroquestadventure.com/scans/HQ%20Game%20System%20US/HQ%20Game%20System%20US.rar
+```
+
+`tools/install-original-us-scan-pack.sh` makes the resumable request, verifies
+the archive, extracts it, and produces the runtime cache. The project does not
+proxy or host the bytes.
+
 The local source archive is named `HQ Game System US.rar`. Its SHA-256 is:
 
 ```text

@@ -2,7 +2,7 @@
 set -euo pipefail
 
 repo_root=$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)
-edition_root="$repo_root/assets/local/editions/original-us"
+edition_root="${HEROQUEST_ART_ROOT:-$repo_root/assets/local/editions/original-us}"
 combat_page="$edition_root/rulebook-pages/page-08.png"
 hero_defense_page="$edition_root/rulebook-pages/page-12.png"
 output_dir="$edition_root/dice"
