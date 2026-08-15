@@ -146,10 +146,10 @@ impl Default for StartupFlow {
             stage: StartupStage::Box,
             selected_quest: 0,
             quest_ceiling: 0,
-            player_count: 1,
+            player_count: 4,
             heroes: std::array::from_fn(|index| HeroSetup {
                 hero: HERO_ORDER[index],
-                player_number: 1,
+                player_number: index as u8 + 1,
                 hero_name: HERO_ORDER[index].name().to_owned(),
             }),
             active_hero: 0,
@@ -496,8 +496,22 @@ mod tests {
     }
 
     #[test]
-    fn all_four_heroes_are_assigned_even_for_one_player() {
+    fn role_selection_defaults_to_one_distinct_player_per_hero() {
         let startup = StartupFlow::default();
+        assert_eq!(startup.player_count, 4);
+        assert_eq!(
+            startup.heroes.each_ref().map(|hero| hero.player_number),
+            [1, 2, 3, 4]
+        );
+    }
+
+    #[test]
+    fn all_four_heroes_are_assigned_when_reduced_to_one_player() {
+        let mut startup = StartupFlow::default();
+        startup.remove_player();
+        startup.remove_player();
+        startup.remove_player();
+        assert_eq!(startup.player_count, 1);
         assert!(startup.heroes.iter().all(|hero| hero.player_number == 1));
     }
 

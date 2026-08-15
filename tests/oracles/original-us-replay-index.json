@@ -13,7 +13,7 @@
       "section": "game_setup",
       "seed": "0x5345545550000001",
       "fixtures": [
-        "all_four_heroes_are_assigned_even_for_one_player",
+        "all_four_heroes_are_assigned_when_reduced_to_one_player",
         "selected_clockwise_order_changes_turns_not_hero_identity_or_start_square",
         "setup_deals_the_elf_three_scanned_spells_and_the_wizard_the_other_nine"
       ]
