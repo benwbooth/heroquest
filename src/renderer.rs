@@ -29,6 +29,61 @@ const STARTUP_DESIGN_SIZE: u32 = 2048;
 const STARTUP_TEXTURE_SIZE: u32 = 1024;
 const HUD_TEXTURE_WIDTH: u32 = 1024;
 const HUD_TEXTURE_HEIGHT: u32 = 640;
+
+#[derive(Clone, Copy, Debug, PartialEq)]
+struct HudViewport {
+    x: f32,
+    y: f32,
+    width: f32,
+    height: f32,
+}
+
+fn hud_viewport(output_width: u32, output_height: u32) -> Option<HudViewport> {
+    if output_width == 0 || output_height == 0 {
+        return None;
+    }
+    let width = output_width as f32;
+    let height = output_height as f32;
+    let hud_aspect = HUD_TEXTURE_WIDTH as f32 / HUD_TEXTURE_HEIGHT as f32;
+    let output_aspect = width / height;
+    if output_aspect >= hud_aspect {
+        let viewport_width = height * hud_aspect;
+        Some(HudViewport {
+            x: (width - viewport_width) * 0.5,
+            y: 0.0,
+            width: viewport_width,
+            height,
+        })
+    } else {
+        let viewport_height = width / hud_aspect;
+        Some(HudViewport {
+            x: 0.0,
+            y: (height - viewport_height) * 0.5,
+            width,
+            height: viewport_height,
+        })
+    }
+}
+
+fn hud_pointer_at_screen(
+    x: f32,
+    y: f32,
+    output_width: u32,
+    output_height: u32,
+) -> Option<(f32, f32)> {
+    let viewport = hud_viewport(output_width, output_height)?;
+    if x < viewport.x
+        || y < viewport.y
+        || x > viewport.x + viewport.width
+        || y > viewport.y + viewport.height
+    {
+        return None;
+    }
+    Some((
+        (x - viewport.x) * HUD_TEXTURE_WIDTH as f32 / viewport.width,
+        (y - viewport.y) * HUD_TEXTURE_HEIGHT as f32 / viewport.height,
+    ))
+}
 const ZARGON_DICE_ROLL_CENTER: Vec3 = Vec3::new(8.4, 0.08, 17.0);
 const ZARGON_QUEST_BOOK_ANGLE: f32 = std::f32::consts::PI;
 
@@ -2199,8 +2254,8 @@ impl Renderer {
     }
 
     /// Returns the OSD action button under a window-space pointer. The HUD is
-    /// a full-window texture, so the same deterministic layout drives drawing
-    /// and hit testing at every window size.
+    /// fitted uniformly inside the window, so the same aspect-preserving
+    /// viewport drives drawing and hit testing at every window size.
     pub fn hud_action_at_screen(
         &self,
         x: f32,
@@ -2208,12 +2263,8 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<String> {
-        if input_width == 0 || input_height == 0 {
-            return None;
-        }
         let state = self.hud_overlay.last_state.as_ref()?;
-        let hud_x = x * HUD_TEXTURE_WIDTH as f32 / input_width as f32;
-        let hud_y = y * HUD_TEXTURE_HEIGHT as f32 / input_height as f32;
+        let (hud_x, hud_y) = hud_pointer_at_screen(x, y, input_width, input_height)?;
         hud_action_button_rects(state.actions.len())
             .into_iter()
             .enumerate()
@@ -2642,6 +2693,16 @@ impl Renderer {
                 pass.set_index_buffer(self.index_buffer.slice(..), wgpu::IndexFormat::Uint16);
                 pass.draw_indexed(0..self.index_count, 0, 0..highlight_instances.len() as u32);
             }
+            let viewport = hud_viewport(self.config.width, self.config.height)
+                .expect("a configured surface always has a non-zero HUD viewport");
+            pass.set_viewport(
+                viewport.x,
+                viewport.y,
+                viewport.width,
+                viewport.height,
+                0.0,
+                1.0,
+            );
             pass.set_pipeline(&self.hud_overlay.pipeline);
             pass.set_bind_group(0, &self.hud_overlay.bind_group, &[]);
             pass.set_vertex_buffer(0, self.hud_overlay.vertex_buffer.slice(..));
@@ -9913,6 +9974,37 @@ mod tests {
                 }
             ));
         }
+    }
+
+    #[test]
+    fn hud_viewport_preserves_text_aspect_ratio_at_every_window_shape() {
+        for (width, height) in [(1440, 900), (1920, 1080), (800, 1000), (2560, 720)] {
+            let viewport = hud_viewport(width, height).unwrap();
+            let aspect = viewport.width / viewport.height;
+            let expected = HUD_TEXTURE_WIDTH as f32 / HUD_TEXTURE_HEIGHT as f32;
+            assert!((aspect - expected).abs() < 0.0001);
+            assert!(viewport.x >= 0.0 && viewport.y >= 0.0);
+            assert!(viewport.x + viewport.width <= width as f32 + 0.001);
+            assert!(viewport.y + viewport.height <= height as f32 + 0.001);
+        }
+    }
+
+    #[test]
+    fn hud_pointer_mapping_uses_the_same_centered_viewport_as_rendering() {
+        let viewport = hud_viewport(1920, 1080).unwrap();
+        assert_eq!(
+            viewport,
+            HudViewport {
+                x: 96.0,
+                y: 0.0,
+                width: 1728.0,
+                height: 1080.0,
+            }
+        );
+        assert!(hud_pointer_at_screen(95.0, 540.0, 1920, 1080).is_none());
+        let center = hud_pointer_at_screen(960.0, 540.0, 1920, 1080).unwrap();
+        assert!((center.0 - HUD_TEXTURE_WIDTH as f32 * 0.5).abs() < 0.001);
+        assert!((center.1 - HUD_TEXTURE_HEIGHT as f32 * 0.5).abs() < 0.001);
     }
 
     #[test]
