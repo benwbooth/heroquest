@@ -29,9 +29,6 @@ const STARTUP_DESIGN_SIZE: u32 = 2048;
 const STARTUP_TEXTURE_SIZE: u32 = 1024;
 const HUD_TEXTURE_WIDTH: u32 = 1024;
 const HUD_TEXTURE_HEIGHT: u32 = 640;
-const HUD_GAMEPLAY_TOP: u32 = 112;
-const HUD_GAMEPLAY_BOTTOM: u32 = 478;
-const HUD_GAMEPLAY_DIALOG_RIGHT: u32 = 610;
 
 #[derive(Clone, Copy, Debug, PartialEq)]
 struct HudViewport {
@@ -88,48 +85,10 @@ fn hud_pointer_at_screen(
     ))
 }
 
-fn gameplay_design_size(dialog_visible: bool) -> (u32, u32) {
-    let width = if dialog_visible {
-        HUD_GAMEPLAY_DIALOG_RIGHT
-    } else {
-        HUD_TEXTURE_WIDTH
-    };
-    (width, HUD_GAMEPLAY_BOTTOM - HUD_GAMEPLAY_TOP)
+fn full_window_aspect(width: u32, height: u32) -> f32 {
+    width as f32 / height.max(1) as f32
 }
 
-fn gameplay_viewport(
-    output_width: u32,
-    output_height: u32,
-    dialog_visible: bool,
-) -> Option<HudViewport> {
-    let hud = hud_viewport(output_width, output_height)?;
-    let (design_width, design_height) = gameplay_design_size(dialog_visible);
-    Some(HudViewport {
-        x: hud.x,
-        y: hud.y + hud.height * HUD_GAMEPLAY_TOP as f32 / HUD_TEXTURE_HEIGHT as f32,
-        width: hud.width * design_width as f32 / HUD_TEXTURE_WIDTH as f32,
-        height: hud.height * design_height as f32 / HUD_TEXTURE_HEIGHT as f32,
-    })
-}
-
-fn gameplay_pointer_at_screen(
-    x: f32,
-    y: f32,
-    output_width: u32,
-    output_height: u32,
-    dialog_visible: bool,
-) -> Option<(f32, f32, u32, u32)> {
-    let (hud_x, hud_y) = hud_pointer_at_screen(x, y, output_width, output_height)?;
-    let (width, height) = gameplay_design_size(dialog_visible);
-    if hud_x < 0.0
-        || hud_x > width as f32
-        || hud_y < HUD_GAMEPLAY_TOP as f32
-        || hud_y > HUD_GAMEPLAY_BOTTOM as f32
-    {
-        return None;
-    }
-    Some((hud_x, hud_y - HUD_GAMEPLAY_TOP as f32, width, height))
-}
 const ZARGON_DICE_ROLL_CENTER: Vec3 = Vec3::new(8.4, 0.08, 17.0);
 const ZARGON_QUEST_BOOK_ANGLE: f32 = std::f32::consts::PI;
 
@@ -2153,17 +2112,11 @@ impl Renderer {
         }
     }
 
-    fn gameplay_dialog_visible(&self) -> bool {
-        self.hud_overlay
-            .last_state
-            .as_ref()
-            .is_some_and(|state| state.dialog.is_some())
-    }
-
     pub fn camera_relative_direction(&self, screen_direction: Direction) -> Direction {
-        let (width, height) = gameplay_design_size(self.gameplay_dialog_visible());
-        self.camera
-            .screen_relative_direction(screen_direction, width as f32 / height as f32)
+        self.camera.screen_relative_direction(
+            screen_direction,
+            full_window_aspect(self.config.width, self.config.height),
+        )
     }
 
     pub fn board_pos_at_screen(
@@ -2173,20 +2126,13 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<Pos> {
-        let (x, y, width, height) = gameplay_pointer_at_screen(
+        board_pos_at_screen(
+            &self.camera,
+            full_window_aspect(self.config.width, self.config.height),
             x,
             y,
             input_width,
             input_height,
-            self.gameplay_dialog_visible(),
-        )?;
-        board_pos_at_screen(
-            &self.camera,
-            width as f32 / height as f32,
-            x,
-            y,
-            width,
-            height,
         )
     }
 
@@ -2199,22 +2145,15 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<HeroSpellTarget> {
-        let (x, y, width, height) = gameplay_pointer_at_screen(
-            x,
-            y,
-            input_width,
-            input_height,
-            self.gameplay_dialog_visible(),
-        )?;
         hero_spell_target_at_screen(
             &self.camera,
             game,
             spell,
-            width as f32 / height as f32,
+            full_window_aspect(self.config.width, self.config.height),
             x,
             y,
-            width,
-            height,
+            input_width,
+            input_height,
         )
     }
 
@@ -2230,20 +2169,13 @@ impl Renderer {
         input_width: u32,
         input_height: u32,
     ) -> Option<TabletopSurface> {
-        let (x, y, width, height) = gameplay_pointer_at_screen(
+        let target = tabletop_hit_target_at_screen(
+            &self.camera,
+            full_window_aspect(self.config.width, self.config.height),
             x,
             y,
             input_width,
             input_height,
-            self.gameplay_dialog_visible(),
-        )?;
-        let target = tabletop_hit_target_at_screen(
-            &self.camera,
-            width as f32 / height as f32,
-            x,
-            y,
-            width,
-            height,
         )?;
         match target {
             TabletopHitTarget::Player(surface) => self.player_stations.as_ref().map(|_| surface),
@@ -2480,13 +2412,7 @@ impl Renderer {
                 bytemuck::cast_slice(&dice_decal_instances),
             );
         }
-        let gameplay = gameplay_viewport(
-            self.config.width,
-            self.config.height,
-            overlay.dialog.is_some(),
-        )
-        .expect("a configured surface always has a non-zero gameplay viewport");
-        let aspect = gameplay.width / gameplay.height;
+        let aspect = full_window_aspect(self.config.width, self.config.height);
         let camera_uniform = CameraUniform {
             view_projection: self.camera.matrix(aspect).to_cols_array_2d(),
             animation: [elapsed, self.camera.yaw, self.camera.pitch, aspect],
@@ -2543,14 +2469,6 @@ impl Renderer {
                 occlusion_query_set: None,
                 multiview_mask: None,
             });
-            pass.set_viewport(
-                gameplay.x,
-                gameplay.y,
-                gameplay.width,
-                gameplay.height,
-                0.0,
-                1.0,
-            );
             if let Some(backdrop) = &self.environment_backdrop {
                 pass.set_pipeline(&backdrop.pipeline);
                 pass.set_bind_group(0, &self.camera_bind_group, &[]);
@@ -10123,21 +10041,11 @@ mod tests {
     }
 
     #[test]
-    fn gameplay_viewport_never_intersects_osd_or_targeting_dialogs() {
-        let normal = gameplay_viewport(1440, 900, false).unwrap();
-        let targeting = gameplay_viewport(1440, 900, true).unwrap();
-        assert!((normal.y - 157.5).abs() < 0.001);
-        assert!((normal.height - 514.6875).abs() < 0.001);
-        assert_eq!(normal.width, 1440.0);
-        assert!(targeting.x + targeting.width < normal.x + normal.width);
-        assert_eq!(targeting.y, normal.y);
-        assert_eq!(targeting.height, normal.height);
-
-        assert!(gameplay_pointer_at_screen(720.0, 100.0, 1440, 900, false).is_none());
-        assert!(gameplay_pointer_at_screen(1200.0, 400.0, 1440, 900, true).is_none());
-        let center = gameplay_pointer_at_screen(429.0, 415.0, 1440, 900, true).unwrap();
-        assert!((center.0 - HUD_GAMEPLAY_DIALOG_RIGHT as f32 * 0.5).abs() < 1.0);
-        assert!((center.1 - (HUD_GAMEPLAY_BOTTOM - HUD_GAMEPLAY_TOP) as f32 * 0.5).abs() < 1.0);
+    fn gameplay_camera_uses_the_full_resized_window_aspect() {
+        assert!((full_window_aspect(1440, 900) - 1.6).abs() < 0.0001);
+        assert!((full_window_aspect(1920, 1080) - 16.0 / 9.0).abs() < 0.0001);
+        assert!((full_window_aspect(800, 1000) - 0.8).abs() < 0.0001);
+        assert_eq!(full_window_aspect(800, 0), 800.0);
     }
 
     #[test]
