@@ -72,7 +72,9 @@ jobs:
             --desktop-file dist/appimage/AppDir/usr/share/applications/heroquest.desktop \
             --icon-file dist/appimage/AppDir/usr/share/icons/hicolor/scalable/apps/heroquest.svg \
             --output appimage
-          appimage=$(find dist/appimage -maxdepth 1 -type f -name '*.AppImage' -print -quit)
+          # linuxdeploy writes the AppImage beside the working directory,
+          # even when the AppDir itself lives under dist/appimage.
+          appimage=$(find . -maxdepth 1 -type f -name '*.AppImage' -print -quit)
           test -n "$appimage"
           mv "$appimage" "dist/HeroQuest-linux-x86_64.AppImage"
           zsyncmake \
