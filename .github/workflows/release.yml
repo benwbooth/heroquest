@@ -99,6 +99,7 @@ jobs:
           mkdir -p dist/flatpak
           cp packaging/flatpak/com.heroquest.Game.yml dist/flatpak/com.heroquest.Game.yml
           flatpak-builder --force-clean --disable-rofiles-fuse \
+            --default-branch=stable \
             --repo=dist/flatpak-repo dist/flatpak-build dist/flatpak/com.heroquest.Game.yml
           flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo \
             dist/flatpak-repo dist/HeroQuest-linux-x86_64.flatpak com.heroquest.Game stable
