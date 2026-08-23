@@ -44,6 +44,13 @@ brew install --cask ./heroquest.rb
 The first launch may require macOS approval in **System Settings → Privacy &
 Security** because the app is distributed outside the Mac App Store.
 
+If macOS still refuses to open the app after approval, remove the downloaded
+file quarantine flag and try again:
+
+```sh
+xattr -cr /Applications/HeroQuest.app
+```
+
 ### Linux
 
 The **AppImage** is the easiest option:
@@ -64,8 +71,9 @@ flatpak run com.heroquest.Game
 
 Linux users who prefer a regular executable can download
 **HeroQuest-linux-x86_64-static-binary.tar.gz**, extract it, and run
-`./heroquest`. This package is intended for advanced setups that already have
-the runtime asset files; AppImage or Flatpak is recommended for most players.
+`./heroquest`. This archive includes the same runtime files and first-run asset
+installer as the AppImage and Flatpak packages; AppImage or Flatpak is still
+recommended for the simplest desktop integration.
 
 ## First launch
 

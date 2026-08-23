@@ -140,17 +140,18 @@ jobs:
         run: |
           cargo build --locked --release --target x86_64-unknown-linux-gnu \
             --features sdl3/build-from-source-static
-          file target/x86_64-unknown-linux-gnu/release/heroquest
-          if ldd target/x86_64-unknown-linux-gnu/release/heroquest | grep -q 'SDL3'; then
+          mkdir -p dist/static-runtime
+          bash packaging/stage-runtime.sh \
+            dist/static-runtime target/x86_64-unknown-linux-gnu/release/heroquest heroquest
+          file dist/static-runtime/heroquest
+          if ldd dist/static-runtime/heroquest | grep -q 'SDL3'; then
             echo 'SDL3 was not statically linked into the standalone binary.' >&2
             exit 1
           fi
 
-      - name: Upload the standalone static binary
+      - name: Package the standalone runtime
         run: |
-          mkdir -p dist/static
-          cp target/x86_64-unknown-linux-gnu/release/heroquest dist/static/heroquest
-          tar -C dist/static -czf dist/HeroQuest-linux-x86_64-static-binary.tar.gz heroquest
+          tar -C dist/static-runtime -czf dist/HeroQuest-linux-x86_64-static-binary.tar.gz .
 
       - name: Upload static Linux release artifact
         uses: actions/upload-artifact@v4
