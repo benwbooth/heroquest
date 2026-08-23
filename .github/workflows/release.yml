@@ -200,9 +200,11 @@ jobs:
           RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
         shell: powershell
         run: |
-          $version = $env:RELEASE_TAG.TrimStart('v')
+          # WiX requires a four-part numeric version, while our release tags
+          # use the conventional three-part semver form (for example v0.1.6).
+          $version = "$($env:RELEASE_TAG.TrimStart('v')).0"
           heat.exe dir dist/windows/HeroQuest -cg HeroQuestFiles -dr INSTALLFOLDER -gg -srd -sreg -out dist/windows/Files.wxs
-          candle.exe -nologo -dProductVersion=$version -dSourceDir="$((Resolve-Path dist/windows/HeroQuest).Path)" packaging/windows/Product.wxs dist/windows/Files.wxs -out dist/windows/
+          candle.exe -nologo "-dProductVersion=$version" "-dSourceDir=$((Resolve-Path dist/windows/HeroQuest).Path)" packaging/windows/Product.wxs dist/windows/Files.wxs -out dist/windows/
           light.exe -nologo -ext WixUIExtension -out dist/HeroQuest-windows-x86_64.msi dist/windows/Product.wixobj dist/windows/Files.wixobj
 
       - name: Upload Windows release artifacts
