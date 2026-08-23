@@ -1,0 +1,6 @@
+#!/bin/sh
+set -eu
+
+HERE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+cd "$HERE/usr/lib/heroquest"
+exec "$HERE/usr/lib/heroquest/heroquest-bin" "$@"

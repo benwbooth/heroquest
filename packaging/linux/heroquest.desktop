@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=HeroQuest 3D
+Comment=A scan-backed 3D dungeon board game with a computer game master
+Exec=heroquest
+Icon=heroquest
+Terminal=false
+Type=Application
+Categories=Game;RolePlaying;
+StartupWMClass=HeroQuest

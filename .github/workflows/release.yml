@@ -1,0 +1,406 @@
+name: Release packages
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to package when running manually (without the v prefix)
+        required: true
+        default: 0.1.0
+
+permissions:
+  contents: write
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  linux:
+    name: Linux AppImage and Flatpak
+    runs-on: ubuntu-24.04
+    env:
+      RUSTFLAGS: -C target-feature=+crt-static
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Linux build and packaging dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes \
+            build-essential cmake ninja-build pkg-config \
+            libasound2-dev libdbus-1-dev libdecor-0-dev libpulse-dev \
+            libusb-1.0-0-dev libvulkan-dev libwayland-dev \
+            libx11-dev libxcursor-dev libxext-dev libxfixes-dev libxi-dev \
+            libxrandr-dev libxrender-dev flatpak flatpak-builder zsync
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Check formatting
+        run: cargo fmt --all -- --check
+
+      - name: Build the release binary with SDL statically linked
+        run: cargo build --locked --release --features sdl3/build-from-source-static
+
+      - name: Stage the portable Linux runtime
+        run: |
+          mkdir -p dist
+          bash packaging/stage-runtime.sh dist/linux-runtime target/release/heroquest heroquest-bin
+
+      - name: Build the updatable AppImage
+        env:
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          mkdir -p dist/appimage/AppDir/usr/lib/heroquest
+          mkdir -p dist/appimage/AppDir/usr/share/applications
+          mkdir -p dist/appimage/AppDir/usr/share/icons/hicolor/scalable/apps
+          cp -a dist/linux-runtime/. dist/appimage/AppDir/usr/lib/heroquest/
+          cp packaging/heroquest.svg dist/appimage/AppDir/usr/share/icons/hicolor/scalable/apps/heroquest.svg
+          sed "s/^Icon=.*/Icon=heroquest/" packaging/linux/heroquest.desktop \
+            > dist/appimage/AppDir/usr/share/applications/heroquest.desktop
+          cp packaging/appimage/AppRun dist/appimage/AppDir/AppRun
+          chmod +x dist/appimage/AppDir/AppRun
+          curl --fail --location --retry 4 \
+            --output "$RUNNER_TEMP/linuxdeploy.AppImage" \
+            https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
+          chmod +x "$RUNNER_TEMP/linuxdeploy.AppImage"
+          APPIMAGE_EXTRACT_AND_RUN=1 "$RUNNER_TEMP/linuxdeploy.AppImage" \
+            --appdir dist/appimage/AppDir \
+            --executable dist/appimage/AppDir/usr/lib/heroquest/heroquest-bin \
+            --desktop-file dist/appimage/AppDir/usr/share/applications/heroquest.desktop \
+            --icon-file dist/appimage/AppDir/usr/share/icons/hicolor/scalable/apps/heroquest.svg \
+            --output appimage
+          appimage=$(find dist/appimage -maxdepth 1 -type f -name '*.AppImage' -print -quit)
+          test -n "$appimage"
+          mv "$appimage" "dist/HeroQuest-linux-x86_64.AppImage"
+          zsyncmake \
+            -u "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/HeroQuest-linux-x86_64.AppImage" \
+            dist/HeroQuest-linux-x86_64.AppImage
+
+      - name: Build the Flatpak bundle and repository
+        run: |
+          sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+          sudo flatpak install --noninteractive -y flathub org.freedesktop.Platform//24.08 org.freedesktop.Sdk//24.08
+          mkdir -p dist/flatpak-source
+          cp -a dist/linux-runtime/. dist/flatpak-source/
+          cat > dist/flatpak-source/heroquest-launcher <<'EOF'
+          #!/bin/sh
+          set -eu
+          cd /app/libexec
+          exec /app/libexec/heroquest-bin "$@"
+          EOF
+          chmod +x dist/flatpak-source/heroquest-launcher
+          cp packaging/linux/heroquest.desktop dist/flatpak-source/com.heroquest.Game.desktop
+          cp packaging/heroquest.svg dist/flatpak-source/heroquest.svg
+          mkdir -p dist/flatpak
+          cp packaging/flatpak/com.heroquest.Game.yml dist/flatpak/com.heroquest.Game.yml
+          flatpak-builder --force-clean --disable-rofiles-fuse \
+            --repo=dist/flatpak-repo dist/flatpak-build dist/flatpak/com.heroquest.Game.yml
+          flatpak build-bundle --runtime-repo=https://flathub.org/repo/flathub.flatpakrepo \
+            dist/flatpak-repo dist/HeroQuest-linux-x86_64.flatpak com.heroquest.Game stable
+          tar -C dist -czf dist/HeroQuest-linux-x86_64-flatpak-repo.tar.gz flatpak-repo
+
+      - name: Upload Linux release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-release
+          if-no-files-found: error
+          path: |
+            dist/HeroQuest-linux-x86_64.AppImage
+            dist/HeroQuest-linux-x86_64.AppImage.zsync
+            dist/HeroQuest-linux-x86_64.flatpak
+            dist/HeroQuest-linux-x86_64-flatpak-repo.tar.gz
+
+  linux-static:
+    name: Verify musl static Linux binary
+    runs-on: ubuntu-24.04
+    env:
+      RUSTFLAGS: -C target-feature=+crt-static
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install musl and SDL build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install --yes \
+            build-essential cmake ninja-build pkg-config musl-tools \
+            libasound2-dev libdbus-1-dev libdecor-0-dev libpulse-dev \
+            libusb-1.0-0-dev libvulkan-dev libwayland-dev \
+            libx11-dev libxcursor-dev libxext-dev libxfixes-dev libxi-dev \
+            libxrandr-dev libxrender-dev
+
+      - name: Install Rust and musl target
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: x86_64-unknown-linux-musl
+
+      - name: Build and verify the musl binary
+        run: |
+          cargo build --locked --release --target x86_64-unknown-linux-musl \
+            --features sdl3/build-from-source-static
+          file target/x86_64-unknown-linux-musl/release/heroquest | tee /tmp/file.txt
+          grep -Eiq 'static(-pie)? linked|statically linked' /tmp/file.txt
+
+      - name: Upload the standalone static binary
+        run: |
+          mkdir -p dist/static
+          cp target/x86_64-unknown-linux-musl/release/heroquest dist/static/heroquest
+          tar -C dist/static -czf dist/HeroQuest-linux-x86_64-static-binary.tar.gz heroquest
+
+      - name: Upload static Linux release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-static-release
+          if-no-files-found: error
+          path: dist/HeroQuest-linux-x86_64-static-binary.tar.gz
+
+  windows:
+    name: Windows MSI and portable ZIP
+    runs-on: windows-2022
+    env:
+      RUSTFLAGS: -C target-feature=+crt-static
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install WiX Toolset
+        shell: powershell
+        run: choco install wixtoolset --version=3.11.2 --no-progress --yes
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Build the release binary
+        run: cargo build --locked --release --features sdl3/build-from-source-static
+
+      - name: Stage the Windows runtime
+        shell: bash
+        run: |
+          mkdir -p dist/windows/HeroQuest
+          bash packaging/stage-runtime.sh dist/windows/HeroQuest target/release/heroquest.exe heroquest.exe
+
+      - name: Create the portable ZIP
+        shell: powershell
+        run: Compress-Archive -Path dist/windows/HeroQuest/* -DestinationPath dist/HeroQuest-windows-x86_64-portable.zip
+
+      - name: Harvest the MSI file list
+        env:
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        shell: powershell
+        run: |
+          $version = $env:RELEASE_TAG.TrimStart('v')
+          heat.exe dir dist/windows/HeroQuest -cg HeroQuestFiles -dr INSTALLFOLDER -gg -srd -sreg -out dist/windows/Files.wxs
+          candle.exe -nologo -dProductVersion=$version -dSourceDir="$((Resolve-Path dist/windows/HeroQuest).Path)" packaging/windows/Product.wxs dist/windows/Files.wxs -out dist/windows/
+          light.exe -nologo -ext WixUIExtension -out dist/HeroQuest-windows-x86_64.msi dist/windows/Product.wixobj dist/windows/Files.wixobj
+
+      - name: Upload Windows release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: windows-release
+          if-no-files-found: error
+          path: |
+            dist/HeroQuest-windows-x86_64-portable.zip
+            dist/HeroQuest-windows-x86_64.msi
+
+  macos-build:
+    name: Build macOS ${{ matrix.arch }} binary
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - arch: aarch64
+            runner: macos-14
+            target: aarch64-apple-darwin
+          - arch: x86_64
+            runner: macos-15-intel
+            target: x86_64-apple-darwin
+    runs-on: ${{ matrix.runner }}
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      - name: Build the release binary
+        run: cargo build --locked --release --target ${{ matrix.target }} --features sdl3/build-from-source-static
+
+      - name: Name the architecture binary for artifact assembly
+        run: |
+          mkdir -p dist
+          cp target/${{ matrix.target }}/release/heroquest dist/heroquest-${{ matrix.arch }}
+
+      - name: Upload architecture binary
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-binary-${{ matrix.arch }}
+          if-no-files-found: error
+          path: dist/heroquest-${{ matrix.arch }}
+
+  macos-package:
+    name: macOS universal DMG and Homebrew cask
+    needs: macos-build
+    runs-on: macos-14
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Download architecture binaries
+        uses: actions/download-artifact@v4
+        with:
+          pattern: macos-binary-*
+          merge-multiple: true
+          path: dist/macos-binaries
+
+      - name: Create the universal app bundle and DMG
+        env:
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          version=${RELEASE_TAG#v}
+          mkdir -p dist/macos
+          find dist/macos-binaries -type f -maxdepth 2 -print
+          aarch64=$(find dist/macos-binaries -type f -path '*aarch64*' -print -quit)
+          x86_64=$(find dist/macos-binaries -type f -path '*x86_64*' -print -quit)
+          if [[ -z "$aarch64" || -z "$x86_64" ]]; then
+            # download-artifact may flatten artifact names; use lipo to
+            # identify the two files when that happens.
+            mapfile -t binaries < <(find dist/macos-binaries -type f -perm -111 -print)
+            aarch64=${binaries[0]}
+            x86_64=${binaries[1]}
+          fi
+          test -n "$aarch64" -a -n "$x86_64"
+          lipo -create "$aarch64" "$x86_64" -output dist/macos/heroquest-universal
+          mkdir -p dist/macos/HeroQuest.app/Contents/{MacOS,Resources}
+          bash packaging/stage-runtime.sh dist/macos/HeroQuest.app/Contents/Resources \
+            dist/macos/heroquest-universal heroquest-bin
+          mv dist/macos/HeroQuest.app/Contents/Resources/heroquest-bin \
+            dist/macos/HeroQuest.app/Contents/MacOS/heroquest-bin
+          cat > dist/macos/HeroQuest.app/Contents/MacOS/heroquest <<'EOF'
+          #!/bin/sh
+          set -eu
+          BASE=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+          export HEROQUEST_ASSET_INSTALLER="$BASE/../Resources/tools/install-all-assets.sh"
+          cd "$BASE/../Resources"
+          exec "$BASE/heroquest-bin" "$@"
+          EOF
+          chmod +x dist/macos/HeroQuest.app/Contents/MacOS/heroquest
+          cat > dist/macos/HeroQuest.app/Contents/Info.plist <<EOF
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0"><dict>
+            <key>CFBundleDisplayName</key><string>HeroQuest 3D</string>
+            <key>CFBundleExecutable</key><string>heroquest</string>
+            <key>CFBundleIdentifier</key><string>com.heroquest.Game</string>
+            <key>CFBundleName</key><string>HeroQuest 3D</string>
+            <key>CFBundlePackageType</key><string>APPL</string>
+            <key>CFBundleShortVersionString</key><string>$version</string>
+            <key>CFBundleVersion</key><string>$version</string>
+            <key>LSMinimumSystemVersion</key><string>11.0</string>
+          </dict></plist>
+          EOF
+          cp packaging/heroquest.svg dist/macos/HeroQuest.app/Contents/Resources/heroquest.svg
+          codesign --force --deep --sign - dist/macos/HeroQuest.app
+          hdiutil create -volname "HeroQuest 3D" -srcfolder dist/macos/HeroQuest.app \
+            -ov -format UDZO dist/HeroQuest-macos-universal.dmg
+
+      - name: Create the Homebrew cask
+        env:
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          version=${RELEASE_TAG#v}
+          sha=$(shasum -a 256 dist/HeroQuest-macos-universal.dmg | awk '{print $1}')
+          mkdir -p dist/homebrew/Casks
+          cat > dist/homebrew/Casks/heroquest.rb <<EOF
+          cask "heroquest" do
+            version "$version"
+            sha256 "$sha"
+            url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/HeroQuest-macos-universal.dmg"
+            name "HeroQuest 3D"
+            desc "A scan-backed 3D dungeon board game with a computer game master"
+            homepage "https://github.com/${GITHUB_REPOSITORY}"
+            app "HeroQuest.app"
+          end
+          EOF
+
+      - name: Upload macOS release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: macos-release
+          if-no-files-found: error
+          path: |
+            dist/HeroQuest-macos-universal.dmg
+            dist/homebrew/Casks/heroquest.rb
+
+  release:
+    name: Publish GitHub release
+    needs: [linux, linux-static, windows, macos-package]
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+
+      - name: Download all package artifacts
+        uses: actions/download-artifact@v4
+        with:
+          path: dist/downloads
+
+      - name: Publish release assets
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          set -euo pipefail
+          mkdir -p dist/release
+          find dist/downloads -type f -exec cp -f {} dist/release/ \;
+          version=${RELEASE_TAG#v}
+          dmg=$(find dist/release -maxdepth 1 -name 'HeroQuest-macos-universal.dmg' -print -quit)
+          sha=$(sha256sum "$dmg" | awk '{print $1}')
+          mkdir -p dist/release/homebrew/Casks
+          cat > dist/release/homebrew/Casks/heroquest.rb <<EOF
+          cask "heroquest" do
+            version "$version"
+            sha256 "$sha"
+            url "https://github.com/${GITHUB_REPOSITORY}/releases/download/${RELEASE_TAG}/HeroQuest-macos-universal.dmg"
+            name "HeroQuest 3D"
+            desc "A scan-backed 3D dungeon board game with a computer game master"
+            homepage "https://github.com/${GITHUB_REPOSITORY}"
+            app "HeroQuest.app"
+          end
+          EOF
+          find dist/release/homebrew -type f -exec cp -f {} dist/release/ \;
+          mapfile -d '' assets < <(find dist/release -maxdepth 1 -type f -print0)
+          if gh release view "$RELEASE_TAG" >/dev/null 2>&1; then
+            gh release upload "$RELEASE_TAG" "${assets[@]}" --clobber
+          else
+            gh release create "$RELEASE_TAG" "${assets[@]}" \
+              --title "HeroQuest 3D $version" --generate-notes
+          fi
+
+      - name: Optionally publish the cask to a Homebrew tap
+        env:
+          HOMEBREW_TAP_TOKEN: ${{ secrets.HOMEBREW_TAP_TOKEN }}
+          RELEASE_TAG: ${{ startsWith(github.ref, 'refs/tags/') && github.ref_name || format('v{0}', inputs.version) }}
+        run: |
+          set -euo pipefail
+          if [[ -z "${HOMEBREW_TAP_TOKEN:-}" ]]; then
+            echo 'HOMEBREW_TAP_TOKEN is not configured; the cask remains available as a release asset.'
+            exit 0
+          fi
+          tap=$(mktemp -d)
+          git clone "https://x-access-token:${HOMEBREW_TAP_TOKEN}@github.com/benwbooth/homebrew-heroquest.git" "$tap"
+          mkdir -p "$tap/Casks"
+          cp dist/release/homebrew/Casks/heroquest.rb "$tap/Casks/heroquest.rb"
+          git -C "$tap" config user.name github-actions[bot]
+          git -C "$tap" config user.email 41898282+github-actions[bot]@users.noreply.github.com
+          git -C "$tap" add Casks/heroquest.rb
+          if ! git -C "$tap" diff --cached --quiet; then
+            git -C "$tap" commit -m "Update HeroQuest $RELEASE_TAG"
+            git -C "$tap" push origin HEAD
+          fi

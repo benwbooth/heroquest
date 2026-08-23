@@ -1,0 +1,26 @@
+app-id: com.heroquest.Game
+runtime: org.freedesktop.Platform
+runtime-version: '24.08'
+sdk: org.freedesktop.Sdk
+command: heroquest
+finish-args:
+  - --share=ipc
+  - --socket=x11
+  - --socket=wayland
+  - --device=dri
+  - --socket=pulseaudio
+modules:
+  - name: heroquest
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 heroquest-launcher /app/bin/heroquest
+      - install -Dm755 heroquest-bin /app/libexec/heroquest-bin
+      - cp -a assets /app/libexec/
+      - cp -a tools /app/libexec/
+      - install -Dm644 LICENSE /app/share/licenses/com.heroquest.Game/LICENSE
+      - install -Dm644 NOTICE.md /app/share/doc/com.heroquest.Game/NOTICE.md
+      - install -Dm644 com.heroquest.Game.desktop /app/share/applications/com.heroquest.Game.desktop
+      - install -Dm644 heroquest.svg /app/share/icons/hicolor/scalable/apps/heroquest.svg
+    sources:
+      - type: dir
+        path: ../flatpak-source

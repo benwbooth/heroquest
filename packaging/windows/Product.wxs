@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Id="*"
+           Name="HeroQuest 3D"
+           Language="1033"
+           Version="$(var.ProductVersion)"
+           Manufacturer="HeroQuest 3D contributors"
+           UpgradeCode="{3F02D7CA-8FB7-4F0A-9B2D-7E5E8A5B6D44}">
+    <Package InstallerVersion="500" Compressed="yes" InstallScope="perMachine" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of HeroQuest 3D is already installed." />
+    <MediaTemplate EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="ProgramFilesFolder">
+        <Directory Id="INSTALLFOLDER" Name="HeroQuest 3D" />
+      </Directory>
+      <Directory Id="ProgramMenuFolder">
+        <Directory Id="ApplicationProgramsFolder" Name="HeroQuest 3D" />
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="ApplicationProgramsFolder">
+      <Component Id="ApplicationShortcut" Guid="{0F9D3B95-9B9B-4B1B-92B1-C7EF25C2F6E1}">
+        <Shortcut Id="HeroQuestStartMenuShortcut"
+                  Name="HeroQuest 3D"
+                  Description="Launch HeroQuest 3D"
+                  Target="[INSTALLFOLDER]heroquest.exe"
+                  WorkingDirectory="INSTALLFOLDER" />
+        <RemoveFolder Id="RemoveApplicationProgramsFolder" On="uninstall" />
+        <RegistryValue Root="HKCU" Key="Software\HeroQuest3D" Name="installed" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="Complete" Title="HeroQuest 3D" Level="1">
+      <ComponentGroupRef Id="HeroQuestFiles" />
+      <ComponentRef Id="ApplicationShortcut" />
+    </Feature>
+  </Product>
+</Wix>
