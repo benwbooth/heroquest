@@ -21,8 +21,6 @@ jobs:
   linux:
     name: Linux AppImage and Flatpak
     runs-on: ubuntu-24.04
-    env:
-      RUSTFLAGS: -C target-feature=+crt-static
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -116,40 +114,39 @@ jobs:
             dist/HeroQuest-linux-x86_64-flatpak-repo.tar.gz
 
   linux-static:
-    name: Verify musl static Linux binary
+    name: Build standalone Linux binary with static SDL
     runs-on: ubuntu-24.04
-    env:
-      RUSTFLAGS: -C target-feature=+crt-static
     steps:
       - name: Check out source
         uses: actions/checkout@v4
 
-      - name: Install musl and SDL build dependencies
+      - name: Install SDL build dependencies
         run: |
           sudo apt-get update
           sudo apt-get install --yes \
-            build-essential cmake ninja-build pkg-config musl-tools \
+            build-essential cmake ninja-build pkg-config \
             libasound2-dev libdbus-1-dev libdecor-0-dev libpulse-dev \
             libusb-1.0-0-dev libvulkan-dev libwayland-dev \
             libx11-dev libxcursor-dev libxext-dev libxfixes-dev libxi-dev \
             libxrandr-dev libxrender-dev
 
-      - name: Install Rust and musl target
+      - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
-        with:
-          targets: x86_64-unknown-linux-musl
 
-      - name: Build and verify the musl binary
+      - name: Build and verify the standalone binary
         run: |
-          cargo build --locked --release --target x86_64-unknown-linux-musl \
+          cargo build --locked --release --target x86_64-unknown-linux-gnu \
             --features sdl3/build-from-source-static
-          file target/x86_64-unknown-linux-musl/release/heroquest | tee /tmp/file.txt
-          grep -Eiq 'static(-pie)? linked|statically linked' /tmp/file.txt
+          file target/x86_64-unknown-linux-gnu/release/heroquest
+          if ldd target/x86_64-unknown-linux-gnu/release/heroquest | grep -q 'SDL3'; then
+            echo 'SDL3 was not statically linked into the standalone binary.' >&2
+            exit 1
+          fi
 
       - name: Upload the standalone static binary
         run: |
           mkdir -p dist/static
-          cp target/x86_64-unknown-linux-musl/release/heroquest dist/static/heroquest
+          cp target/x86_64-unknown-linux-gnu/release/heroquest dist/static/heroquest
           tar -C dist/static -czf dist/HeroQuest-linux-x86_64-static-binary.tar.gz heroquest
 
       - name: Upload static Linux release artifact
@@ -170,7 +167,16 @@ jobs:
 
       - name: Install WiX Toolset
         shell: powershell
-        run: choco install wixtoolset --version=3.11.2 --no-progress --yes
+        run: |
+          $wix = Get-ChildItem -Path "${env:ProgramFiles(x86)}\WiX Toolset v*" -Directory -ErrorAction SilentlyContinue |
+            Sort-Object Name -Descending | Select-Object -First 1
+          if (-not $wix) {
+            choco install wixtoolset --no-progress --yes
+            $wix = Get-ChildItem -Path "${env:ProgramFiles(x86)}\WiX Toolset v*" -Directory |
+              Sort-Object Name -Descending | Select-Object -First 1
+          }
+          if (-not $wix) { throw 'WiX Toolset was not found after installation.' }
+          "$($wix.FullName)\bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -220,6 +226,8 @@ jobs:
             runner: macos-15-intel
             target: x86_64-apple-darwin
     runs-on: ${{ matrix.runner }}
+    env:
+      MACOSX_DEPLOYMENT_TARGET: '14.0'
     steps:
       - name: Check out source
         uses: actions/checkout@v4
@@ -302,7 +310,7 @@ jobs:
             <key>CFBundlePackageType</key><string>APPL</string>
             <key>CFBundleShortVersionString</key><string>$version</string>
             <key>CFBundleVersion</key><string>$version</string>
-            <key>LSMinimumSystemVersion</key><string>11.0</string>
+            <key>LSMinimumSystemVersion</key><string>14.0</string>
           </dict></plist>
           EOF
           cp packaging/heroquest.svg dist/macos/HeroQuest.app/Contents/Resources/heroquest.svg
