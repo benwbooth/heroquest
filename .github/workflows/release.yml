@@ -226,6 +226,10 @@ jobs:
     runs-on: ${{ matrix.runner }}
     env:
       MACOSX_DEPLOYMENT_TARGET: '15.0'
+      # SDL's Cocoa object uses Apple's availability helper, which is
+      # provided by libSystem at runtime but is not exported by the runner's
+      # static link invocation. Leave that symbol for the system loader.
+      RUSTFLAGS: -C link-arg=-Wl,-undefined,dynamic_lookup
     steps:
       - name: Check out source
         uses: actions/checkout@v4
