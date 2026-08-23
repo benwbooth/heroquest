@@ -205,7 +205,9 @@ jobs:
           $version = "$($env:RELEASE_TAG.TrimStart('v')).0"
           heat.exe dir dist/windows/HeroQuest -cg HeroQuestFiles -dr INSTALLFOLDER -gg -srd -sreg -out dist/windows/Files.wxs
           candle.exe -nologo "-dProductVersion=$version" "-dSourceDir=$((Resolve-Path dist/windows/HeroQuest).Path)" packaging/windows/Product.wxs dist/windows/Files.wxs -out dist/windows/
-          light.exe -nologo -ext WixUIExtension -out dist/HeroQuest-windows-x86_64.msi dist/windows/Product.wixobj dist/windows/Files.wixobj
+          light.exe -nologo -ext WixUIExtension \
+            -b "$((Resolve-Path dist/windows/HeroQuest).Path)" \
+            -out dist/HeroQuest-windows-x86_64.msi dist/windows/Product.wixobj dist/windows/Files.wixobj
 
       - name: Upload Windows release artifacts
         uses: actions/upload-artifact@v4
